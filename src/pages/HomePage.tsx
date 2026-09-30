@@ -1,17 +1,42 @@
-import { useAuth } from '../auth/AuthContext'
+import { useListings } from '../listings/api'
+import { ListingCard } from '../listings/ListingCard'
 
 export function HomePage() {
-  const { user, logout } = useAuth()
+  const { data, isLoading, isError } = useListings()
+
+  if (isLoading) {
+    return (
+      <div className="flex justify-center py-16">
+        <span className="loading loading-spinner loading-lg text-primary" />
+      </div>
+    )
+  }
+
+  if (isError) {
+    return (
+      <div className="py-16 text-center text-base-content/60">
+        No pudimos cargar las publicaciones. Probá de nuevo más tarde.
+      </div>
+    )
+  }
+
+  const listings = data?.listings ?? []
+
+  if (listings.length === 0) {
+    return (
+      <div className="flex flex-col items-center gap-2 py-16 text-center">
+        <span className="text-4xl">📭</span>
+        <h2 className="font-bold">Todavía no hay publicaciones</h2>
+        <p className="text-sm text-base-content/60">Sé el primero en publicar algo.</p>
+      </div>
+    )
+  }
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-base-200">
-      <h1 className="text-3xl font-bold">Hola, {user?.name}</h1>
-      <p className="text-base-content/70">
-        {user?.email} · {user?.role}
-      </p>
-      <button type="button" className="btn btn-outline" onClick={logout}>
-        Cerrar sesión
-      </button>
+    <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      {listings.map((listing) => (
+        <ListingCard key={listing.id} listing={listing} />
+      ))}
     </div>
   )
 }
