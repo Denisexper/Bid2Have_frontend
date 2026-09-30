@@ -1,14 +1,24 @@
+import { GoogleOAuthProvider } from '@react-oauth/google'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { AuthProvider } from './auth/AuthContext'
+import { ProtectedRoute } from './components/ProtectedRoute'
+import { LoginPage } from './pages/LoginPage'
+import { HomePage } from './pages/HomePage'
+
 function App() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-base-200">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold">Bid2Have</h1>
-        <p className="mt-2 text-base-content/70">Frontend en construcción</p>
-        <button type="button" className="btn btn-primary mt-4">
-          DaisyUI listo
-        </button>
-      </div>
-    </div>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route path="/login" element={<LoginPage />} />
+            <Route element={<ProtectedRoute />}>
+              <Route path="/" element={<HomePage />} />
+            </Route>
+          </Routes>
+        </BrowserRouter>
+      </AuthProvider>
+    </GoogleOAuthProvider>
   )
 }
 
