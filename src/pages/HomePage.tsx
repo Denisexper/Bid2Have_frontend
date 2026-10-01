@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useCategories } from '../categories/api'
 import { useListings } from '../listings/api'
 import { ListingCard } from '../listings/ListingCard'
 
@@ -12,9 +13,13 @@ export function HomePage() {
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null)
   const [geoStatus, setGeoStatus] = useState<GeoStatus>('idle')
 
+  const [search, setSearch] = useState('')
+  const [categoryId, setCategoryId] = useState('')
+
   const { data, isLoading, isError } = useListings(
     nearbyEnabled && coords ? { lat: coords.lat, lng: coords.lng, radiusKm } : undefined,
   )
+  const { data: categoriesData } = useCategories()
 
   function enableNearby(): void {
     setNearbyEnabled(true)
@@ -34,32 +39,61 @@ export function HomePage() {
     setGeoStatus('idle')
   }
 
-  const listings = data?.listings ?? []
+  const allListings = data?.listings ?? []
+  const hasFilters = Boolean(search.trim()) || Boolean(categoryId)
+  const listings = allListings.filter((listing) => {
+    const matchesCategory = !categoryId || listing.categoryId === categoryId
+    const matchesSearch = !search.trim() || listing.title.toLowerCase().includes(search.trim().toLowerCase())
+    return matchesCategory && matchesSearch
+  })
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex items-center justify-between gap-2 rounded-2xl bg-base-100 p-3 shadow-sm">
-        <button
-          type="button"
-          className={`btn btn-sm ${nearbyEnabled ? 'btn-primary' : 'btn-ghost'}`}
-          onClick={() => (nearbyEnabled ? disableNearby() : enableNearby())}
-        >
-          📍 Cerca mío
-        </button>
+      <div className="flex flex-col gap-2 rounded-2xl bg-base-100 p-3 shadow-sm">
+        <input
+          type="text"
+          className="input input-bordered input-sm"
+          placeholder="Buscar por título..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+        />
 
-        {nearbyEnabled && (
+        <div className="flex flex-wrap items-center gap-2">
           <select
             className="select select-bordered select-sm"
-            value={radiusKm}
-            onChange={(e) => setRadiusKm(Number(e.target.value))}
+            value={categoryId}
+            onChange={(e) => setCategoryId(e.target.value)}
           >
-            {radiusOptions.map((km) => (
-              <option key={km} value={km}>
-                {km} km
+            <option value="">Todas las categorías</option>
+            {categoriesData?.categories.map((category) => (
+              <option key={category.id} value={category.id}>
+                {category.name}
               </option>
             ))}
           </select>
-        )}
+
+          <button
+            type="button"
+            className={`btn btn-sm ${nearbyEnabled ? 'btn-primary' : 'btn-ghost'}`}
+            onClick={() => (nearbyEnabled ? disableNearby() : enableNearby())}
+          >
+            📍 Cerca mío
+          </button>
+
+          {nearbyEnabled && (
+            <select
+              className="select select-bordered select-sm"
+              value={radiusKm}
+              onChange={(e) => setRadiusKm(Number(e.target.value))}
+            >
+              {radiusOptions.map((km) => (
+                <option key={km} value={km}>
+                  {km} km
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
       </div>
 
       {nearbyEnabled && geoStatus === 'loading' && (
@@ -95,10 +129,18 @@ export function HomePage() {
             <div className="flex flex-col items-center gap-2 py-16 text-center">
               <span className="text-4xl">📭</span>
               <h2 className="font-bold">
-                {nearbyEnabled ? 'No hay publicaciones cerca tuyo' : 'Todavía no hay publicaciones'}
+                {hasFilters
+                  ? 'No encontramos publicaciones con esos filtros'
+                  : nearbyEnabled
+                    ? 'No hay publicaciones cerca tuyo'
+                    : 'Todavía no hay publicaciones'}
               </h2>
               <p className="text-sm text-base-content/60">
-                {nearbyEnabled ? 'Probá con un radio más amplio.' : 'Sé el primero en publicar algo.'}
+                {hasFilters
+                  ? 'Probá cambiando la búsqueda o la categoría.'
+                  : nearbyEnabled
+                    ? 'Probá con un radio más amplio.'
+                    : 'Sé el primero en publicar algo.'}
               </p>
             </div>
           )}
