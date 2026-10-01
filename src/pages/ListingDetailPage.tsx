@@ -7,6 +7,7 @@ import { BuyerOfferPanel } from '../offers/BuyerOfferPanel'
 import { SellerOffersPanel } from '../offers/SellerOffersPanel'
 import { FollowButton } from '../follows/FollowButton'
 import { ReportButton } from '../reports/ReportButton'
+import { SellerListingActions } from '../listings/SellerListingActions'
 
 const statusLabels: Record<string, string> = {
   ACTIVE: 'Activa',
@@ -92,6 +93,8 @@ export function ListingDetailPage() {
             <ReportButton label="Reportar publicación" targetType="LISTING" listingId={listing.id} />
           </div>
         )}
+
+        {isOwner && <SellerListingActions listing={listing} />}
       </div>
 
       {isOwner ? (
