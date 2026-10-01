@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import type { Listing } from './types'
 import { formatCountdown, formatPrice, formatRelativeTime } from './format'
 
@@ -10,7 +11,10 @@ export function ListingCard({ listing }: ListingCardProps) {
   const photo = listing.photos[0]
 
   return (
-    <article className="overflow-hidden rounded-2xl bg-base-100 shadow-sm">
+    <Link
+      to={`/listings/${listing.id}`}
+      className="block overflow-hidden rounded-2xl bg-base-100 shadow-sm active:scale-[0.99]"
+    >
       <div className="relative aspect-video bg-base-200">
         {photo ? (
           <img src={photo} alt={listing.title} className="h-full w-full object-cover" />
@@ -38,6 +42,6 @@ export function ListingCard({ listing }: ListingCardProps) {
           <span>{formatRelativeTime(listing.createdAt)}</span>
         </div>
       </div>
-    </article>
+    </Link>
   )
 }

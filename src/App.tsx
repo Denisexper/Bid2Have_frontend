@@ -5,6 +5,7 @@ import { ProtectedRoute } from './components/ProtectedRoute'
 import { AppLayout } from './components/AppLayout'
 import { LoginPage } from './pages/LoginPage'
 import { HomePage } from './pages/HomePage'
+import { ListingDetailPage } from './pages/ListingDetailPage'
 import { NewListingPage } from './pages/NewListingPage'
 import { ChatsPage } from './pages/ChatsPage'
 import { ChatDetailPage } from './pages/ChatDetailPage'
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/chats/:id" element={<ChatDetailPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/listings/new" element={<NewListingPage />} />
+                <Route path="/listings/:id" element={<ListingDetailPage />} />
               </Route>
             </Route>
             <Route path="*" element={<NotFoundPage />} />
