@@ -12,6 +12,7 @@ import { ChatsPage } from './pages/ChatsPage'
 import { ChatDetailPage } from './pages/ChatDetailPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { AdminReportsPage } from './pages/AdminReportsPage'
+import { AdminUsersPage } from './pages/AdminUsersPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
                 <Route path="/listings/:id" element={<ListingDetailPage />} />
                 <Route element={<SuperAdminRoute />}>
                   <Route path="/admin/reports" element={<AdminReportsPage />} />
+                  <Route path="/admin/users" element={<AdminUsersPage />} />
                 </Route>
               </Route>
             </Route>
