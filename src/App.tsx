@@ -8,7 +8,7 @@ import { HomePage } from './pages/HomePage'
 import { NewListingPage } from './pages/NewListingPage'
 import { ChatsPage } from './pages/ChatsPage'
 import { ChatDetailPage } from './pages/ChatDetailPage'
-import { ComingSoonPage } from './pages/ComingSoonPage'
+import { ProfilePage } from './pages/ProfilePage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
                 <Route path="/" element={<HomePage />} />
                 <Route path="/chats" element={<ChatsPage />} />
                 <Route path="/chats/:id" element={<ChatDetailPage />} />
-                <Route path="/profile" element={<ComingSoonPage title="Perfil" />} />
+                <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/listings/new" element={<NewListingPage />} />
               </Route>
             </Route>
