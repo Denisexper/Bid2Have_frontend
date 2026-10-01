@@ -5,6 +5,7 @@ import { useListing } from '../listings/api'
 import { formatCountdown, formatPrice, formatRelativeTime } from '../listings/format'
 import { BuyerOfferPanel } from '../offers/BuyerOfferPanel'
 import { SellerOffersPanel } from '../offers/SellerOffersPanel'
+import { FollowButton } from '../follows/FollowButton'
 
 const statusLabels: Record<string, string> = {
   ACTIVE: 'Activa',
@@ -80,6 +81,12 @@ export function ListingDetailPage() {
         </div>
 
         <p className="mt-3 whitespace-pre-wrap text-sm text-base-content/80">{listing.description}</p>
+
+        {!isOwner && (
+          <div className="mt-3 border-t border-base-200 pt-3">
+            <FollowButton sellerId={listing.sellerId} />
+          </div>
+        )}
       </div>
 
       {isOwner ? (

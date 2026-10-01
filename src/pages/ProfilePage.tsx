@@ -3,11 +3,15 @@ import { useUserRatings } from '../ratings/api'
 import { formatRelativeTime } from '../listings/format'
 import { useListings } from '../listings/api'
 import { ListingCard } from '../listings/ListingCard'
+import { useFollowing, useUnfollowUser } from '../follows/api'
+import { ApiError } from '../api/client'
 
 export function ProfilePage() {
   const { user } = useAuth()
   const { data: ratingsData, isLoading: isLoadingRatings } = useUserRatings(user?.id ?? '')
   const { data: listingsData, isLoading: isLoadingListings } = useListings()
+  const { data: followingData, isLoading: isLoadingFollowing } = useFollowing()
+  const unfollow = useUnfollowUser()
 
   const initial = user?.name?.charAt(0).toUpperCase() ?? '?'
   const myListings = listingsData?.listings.filter((listing) => listing.sellerId === user?.id) ?? []
@@ -48,6 +52,36 @@ export function ProfilePage() {
               </li>
             ))}
           </ul>
+        )}
+      </div>
+
+      <div className="rounded-2xl bg-base-100 p-4 shadow-sm">
+        <h2 className="mb-2 text-sm font-bold text-base-content/70">Vendedores que sigo</h2>
+        {isLoadingFollowing ? (
+          <span className="loading loading-spinner loading-sm text-primary" />
+        ) : followingData && followingData.follows.length > 0 ? (
+          <ul className="flex flex-col gap-2">
+            {followingData.follows.map((follow) => (
+              <li key={follow.id} className="flex items-center justify-between rounded-lg bg-base-200 p-2 text-sm">
+                <span>Vendedor #{follow.followingId.slice(0, 8)}</span>
+                <button
+                  type="button"
+                  className="btn btn-ghost btn-xs"
+                  disabled={unfollow.isPending}
+                  onClick={() => unfollow.mutate(follow.followingId)}
+                >
+                  Dejar de seguir
+                </button>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-sm text-base-content/60">Todavía no seguís a ningún vendedor.</p>
+        )}
+        {unfollow.isError && (
+          <p className="mt-1 text-xs text-error">
+            {unfollow.error instanceof ApiError ? unfollow.error.message : 'No pudimos dejar de seguir.'}
+          </p>
         )}
       </div>
 
