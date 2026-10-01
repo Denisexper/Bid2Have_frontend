@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
 import { apiFetch, getToken, setToken } from '../api/client'
+import { disconnectChatSocket } from '../chat/socket'
 import type { AuthUser } from './types'
 
 interface GoogleLoginResponse {
@@ -48,6 +49,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   function logout(): void {
     setToken(null)
     setUser(null)
+    disconnectChatSocket()
   }
 
   return (

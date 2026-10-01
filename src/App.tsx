@@ -6,6 +6,8 @@ import { AppLayout } from './components/AppLayout'
 import { LoginPage } from './pages/LoginPage'
 import { HomePage } from './pages/HomePage'
 import { NewListingPage } from './pages/NewListingPage'
+import { ChatsPage } from './pages/ChatsPage'
+import { ChatDetailPage } from './pages/ChatDetailPage'
 import { ComingSoonPage } from './pages/ComingSoonPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
@@ -19,7 +21,8 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route element={<AppLayout />}>
                 <Route path="/" element={<HomePage />} />
-                <Route path="/chats" element={<ComingSoonPage title="Chats" />} />
+                <Route path="/chats" element={<ChatsPage />} />
+                <Route path="/chats/:id" element={<ChatDetailPage />} />
                 <Route path="/profile" element={<ComingSoonPage title="Perfil" />} />
                 <Route path="/listings/new" element={<NewListingPage />} />
               </Route>

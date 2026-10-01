@@ -31,6 +31,13 @@ export function useListings() {
   })
 }
 
+export function useListing(id: string) {
+  return useQuery({
+    queryKey: ['listings', id],
+    queryFn: () => apiFetch<ListingResponse>(`/listings/${id}`),
+  })
+}
+
 export function useCreateListing() {
   const queryClient = useQueryClient()
 
