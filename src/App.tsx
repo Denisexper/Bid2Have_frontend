@@ -13,6 +13,7 @@ import { ChatDetailPage } from './pages/ChatDetailPage'
 import { ProfilePage } from './pages/ProfilePage'
 import { AdminReportsPage } from './pages/AdminReportsPage'
 import { AdminUsersPage } from './pages/AdminUsersPage'
+import { AdminCategoriesPage } from './pages/AdminCategoriesPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
 function App() {
@@ -33,6 +34,7 @@ function App() {
                 <Route element={<SuperAdminRoute />}>
                   <Route path="/admin/reports" element={<AdminReportsPage />} />
                   <Route path="/admin/users" element={<AdminUsersPage />} />
+                  <Route path="/admin/categories" element={<AdminCategoriesPage />} />
                 </Route>
               </Route>
             </Route>

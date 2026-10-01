@@ -38,6 +38,9 @@ export function TopBar() {
                 <li>
                   <Link to="/admin/users">Usuarios (admin)</Link>
                 </li>
+                <li>
+                  <Link to="/admin/categories">Categorías (admin)</Link>
+                </li>
               </>
             )}
             <li>
