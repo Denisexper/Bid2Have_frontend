@@ -6,6 +6,7 @@ import { formatCountdown, formatPrice, formatRelativeTime } from '../listings/fo
 import { BuyerOfferPanel } from '../offers/BuyerOfferPanel'
 import { SellerOffersPanel } from '../offers/SellerOffersPanel'
 import { FollowButton } from '../follows/FollowButton'
+import { ReportButton } from '../reports/ReportButton'
 
 const statusLabels: Record<string, string> = {
   ACTIVE: 'Activa',
@@ -83,8 +84,12 @@ export function ListingDetailPage() {
         <p className="mt-3 whitespace-pre-wrap text-sm text-base-content/80">{listing.description}</p>
 
         {!isOwner && (
-          <div className="mt-3 border-t border-base-200 pt-3">
-            <FollowButton sellerId={listing.sellerId} />
+          <div className="mt-3 flex flex-col gap-2 border-t border-base-200 pt-3">
+            <div className="flex items-center gap-2">
+              <FollowButton sellerId={listing.sellerId} />
+              <ReportButton label="Reportar vendedor" targetType="USER" targetUserId={listing.sellerId} />
+            </div>
+            <ReportButton label="Reportar publicación" targetType="LISTING" listingId={listing.id} />
           </div>
         )}
       </div>
