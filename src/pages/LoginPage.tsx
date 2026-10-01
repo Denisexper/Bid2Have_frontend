@@ -2,10 +2,12 @@ import { useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { GoogleLoginButton } from '../auth/GoogleLoginButton'
+import { consumeSessionExpiredFlag } from '../api/client'
 
 export function LoginPage() {
   const { user } = useAuth()
   const [error, setError] = useState<string | null>(null)
+  const [showExpiredNotice] = useState(() => consumeSessionExpiredFlag())
 
   if (user) {
     return <Navigate to="/" replace />
@@ -17,6 +19,9 @@ export function LoginPage() {
         <div className="card-body items-center text-center">
           <h1 className="card-title text-2xl">Bid2Have</h1>
           <p className="text-base-content/70">Iniciá sesión para continuar</p>
+          {showExpiredNotice && (
+            <p className="mt-2 text-sm text-warning">Tu sesión expiró. Volvé a iniciar sesión.</p>
+          )}
           <div className="mt-4">
             <GoogleLoginButton onError={setError} />
           </div>

@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useState, type ReactNode } from 'react'
-import { apiFetch, getToken, setToken } from '../api/client'
+import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
+import { apiFetch, getToken, onUnauthorized, setToken } from '../api/client'
 import { disconnectChatSocket } from '../chat/socket'
 import type { AuthUser } from './types'
 
@@ -46,11 +46,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(res.user)
   }
 
-  function logout(): void {
+  const logout = useCallback(() => {
     setToken(null)
     setUser(null)
     disconnectChatSocket()
-  }
+  }, [])
+
+  useEffect(() => {
+    return onUnauthorized(logout)
+  }, [logout])
 
   return (
     <AuthContext.Provider value={{ user, isLoading, loginWithGoogle, logout }}>
