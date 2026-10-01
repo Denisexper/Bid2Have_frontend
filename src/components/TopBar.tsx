@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { NotificationsBell } from '../notifications/NotificationsBell'
 import { useTheme } from '../theme/useTheme'
@@ -29,6 +30,11 @@ export function TopBar() {
           </div>
           <ul tabIndex={0} className="menu dropdown-content menu-sm z-30 mt-2 w-48 rounded-box bg-base-100 p-2 shadow-lg">
             <li className="px-3 py-1 text-xs text-base-content/50">{user?.email}</li>
+            {user?.role === 'SUPERADMIN' && (
+              <li>
+                <Link to="/admin/reports">Reportes (admin)</Link>
+              </li>
+            )}
             <li>
               <button type="button" onClick={logout}>
                 Cerrar sesión

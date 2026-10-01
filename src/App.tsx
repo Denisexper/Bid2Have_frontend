@@ -2,6 +2,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { AuthProvider } from './auth/AuthContext'
 import { ProtectedRoute } from './components/ProtectedRoute'
+import { SuperAdminRoute } from './components/SuperAdminRoute'
 import { AppLayout } from './components/AppLayout'
 import { LoginPage } from './pages/LoginPage'
 import { HomePage } from './pages/HomePage'
@@ -10,6 +11,7 @@ import { NewListingPage } from './pages/NewListingPage'
 import { ChatsPage } from './pages/ChatsPage'
 import { ChatDetailPage } from './pages/ChatDetailPage'
 import { ProfilePage } from './pages/ProfilePage'
+import { AdminReportsPage } from './pages/AdminReportsPage'
 import { NotFoundPage } from './pages/NotFoundPage'
 
 function App() {
@@ -27,6 +29,9 @@ function App() {
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/listings/new" element={<NewListingPage />} />
                 <Route path="/listings/:id" element={<ListingDetailPage />} />
+                <Route element={<SuperAdminRoute />}>
+                  <Route path="/admin/reports" element={<AdminReportsPage />} />
+                </Route>
               </Route>
             </Route>
             <Route path="*" element={<NotFoundPage />} />
