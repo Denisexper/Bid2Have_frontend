@@ -8,6 +8,7 @@ import type { Listing } from '../listings/types'
 import { useCreateOffer, useOffer } from './api'
 import { getMyOfferId, setMyOfferId } from './myOfferStorage'
 import { offerStatusLabels } from './statusLabels'
+import { RateOfferButton } from '../ratings/RateOfferButton'
 
 interface BuyerOfferPanelProps {
   listing: Listing
@@ -66,16 +67,21 @@ function BuyerOfferPanelInner({ listing, userId }: { listing: Listing; userId: s
           </p>
 
           {offer.status === 'ACCEPTED' && (
-            <p className="mt-2 text-sm text-success">
-              ¡Tu oferta fue aceptada!{' '}
-              {chat ? (
-                <Link to={`/chats/${chat.id}`} className="link link-primary">
-                  Ir al chat
-                </Link>
-              ) : (
-                'El chat se está creando, revisá la sección Chats en un momento.'
-              )}
-            </p>
+            <>
+              <p className="mt-2 text-sm text-success">
+                ¡Tu oferta fue aceptada!{' '}
+                {chat ? (
+                  <Link to={`/chats/${chat.id}`} className="link link-primary">
+                    Ir al chat
+                  </Link>
+                ) : (
+                  'El chat se está creando, revisá la sección Chats en un momento.'
+                )}
+              </p>
+              <div className="mt-2">
+                <RateOfferButton offerId={offer.id} label="Calificar al vendedor" />
+              </div>
+            </>
           )}
 
           {offer.status === 'REJECTED' && <p className="mt-2 text-sm text-error">El vendedor rechazó tu oferta.</p>}

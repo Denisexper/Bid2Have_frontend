@@ -4,6 +4,7 @@ import { formatPrice, formatRelativeTime } from '../listings/format'
 import { useAcceptOffer, useCounterOffer, useListingOffers, useRejectOffer } from './api'
 import { offerStatusLabels } from './statusLabels'
 import type { Offer } from './types'
+import { RateOfferButton } from '../ratings/RateOfferButton'
 
 interface SellerOffersPanelProps {
   listingId: string
@@ -119,6 +120,12 @@ function OfferRow({ offer, listingId, currency }: { offer: Offer; listingId: str
               </button>
             </div>
           )}
+        </div>
+      )}
+
+      {offer.status === 'ACCEPTED' && (
+        <div className="mt-2">
+          <RateOfferButton offerId={offer.id} label="Calificar al comprador" />
         </div>
       )}
 
