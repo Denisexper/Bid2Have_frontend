@@ -1,4 +1,5 @@
 import { useAuth } from '../auth/AuthContext'
+import { NotificationsBell } from '../notifications/NotificationsBell'
 import { useTheme } from '../theme/useTheme'
 
 export function TopBar() {
@@ -19,6 +20,7 @@ export function TopBar() {
         >
           {theme === 'bid2have-dark' ? '☀️' : '🌙'}
         </button>
+        <NotificationsBell />
         <div className="dropdown dropdown-end">
           <div tabIndex={0} role="button" className="btn btn-circle btn-ghost btn-sm">
             <div className="flex h-7 w-7 items-center justify-center rounded-full bg-primary text-xs font-bold text-primary-content">
