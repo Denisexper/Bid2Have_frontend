@@ -1,0 +1,1170 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Bid2Have API Tester</title>
+<style>
+  :root {
+    color-scheme: light dark;
+    --bg: #f5f6f8;
+    --panel: #ffffff;
+    --border: #d9dce1;
+    --text: #1a1d23;
+    --muted: #6b7280;
+    --accent: #4f46e5;
+    --ok: #16a34a;
+    --err: #dc2626;
+    --code-bg: #f0f1f4;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #15171c;
+      --panel: #1e2128;
+      --border: #30333c;
+      --text: #e8e9ec;
+      --muted: #9aa0ac;
+      --accent: #818cf8;
+      --ok: #4ade80;
+      --err: #f87171;
+      --code-bg: #141619;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    padding: 16px;
+    background: var(--bg);
+    color: var(--text);
+    font-family: ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-size: 14px;
+    max-width: 900px;
+    margin-inline: auto;
+  }
+  h1 { font-size: 18px; margin: 0 0 4px; }
+  .subtitle { color: var(--muted); margin: 0 0 16px; font-size: 13px; }
+  .config {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 16px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+  .config input {
+    flex: 1;
+    min-width: 180px;
+  }
+  .config .token-row { display: flex; gap: 8px; width: 100%; align-items: center; }
+  .config .token-row input { flex: 1; font-family: ui-monospace, monospace; font-size: 12px; }
+  details {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+  summary {
+    cursor: pointer;
+    padding: 10px 14px;
+    font-weight: 600;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: '▾'; color: var(--muted); }
+  details[open] summary::after { content: '▴'; }
+  .endpoints { padding: 0 14px 14px; display: flex; flex-direction: column; gap: 10px; }
+  .endpoint {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px;
+  }
+  .endpoint-head {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+    margin-bottom: 6px;
+    flex-wrap: wrap;
+  }
+  .method {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: white;
+    background: var(--accent);
+  }
+  .method.get { background: #0891b2; }
+  .method.post { background: #16a34a; }
+  .method.patch { background: #d97706; }
+  .method.delete { background: #dc2626; }
+  .path { font-family: ui-monospace, monospace; font-size: 12.5px; }
+  .hint { color: var(--muted); font-size: 11.5px; margin: 0 0 6px; }
+  .auth-note {
+    display: inline-block;
+    font-size: 10.5px;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 0 5px;
+  }
+  form { display: flex; flex-wrap: wrap; gap: 6px; align-items: flex-end; }
+  .field { display: flex; flex-direction: column; gap: 2px; }
+  .field label { font-size: 10.5px; color: var(--muted); }
+  input, select, textarea {
+    font-family: inherit;
+    font-size: 13px;
+    padding: 5px 7px;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+  }
+  textarea { min-width: 180px; min-height: 32px; resize: vertical; }
+  button {
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    cursor: pointer;
+  }
+  button:hover { filter: brightness(1.08); }
+  button.secondary { background: var(--border); color: var(--text); }
+  .status-badge {
+    font-family: ui-monospace, monospace;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background: var(--code-bg);
+    color: var(--muted);
+  }
+  .status-badge.status-ok { color: var(--ok); }
+  .status-badge.status-err { color: var(--err); }
+  #log-section { position: sticky; bottom: 0; }
+  #log {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    max-height: 340px;
+    overflow-y: auto;
+    padding: 8px;
+    display: flex;
+    flex-direction: column-reverse;
+    gap: 6px;
+  }
+  .log-entry {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 6px 8px;
+  }
+  .log-entry .log-head {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 11px;
+    color: var(--muted);
+  }
+  .log-entry pre {
+    margin: 6px 0 0;
+    white-space: pre-wrap;
+    word-break: break-word;
+    font-size: 11.5px;
+    background: var(--code-bg);
+    padding: 6px;
+    border-radius: 4px;
+    max-height: 200px;
+    overflow: auto;
+  }
+  #chat-events {
+    background: var(--code-bg);
+    border-radius: 6px;
+    padding: 6px;
+    font-family: ui-monospace, monospace;
+    font-size: 11.5px;
+    max-height: 160px;
+    overflow-y: auto;
+    white-space: pre-wrap;
+  }
+  .socket-status { font-size: 11.5px; color: var(--muted); }
+  .socket-status.connected { color: var(--ok); }
+  .warning-banner {
+    background: color-mix(in srgb, var(--err) 12%, var(--panel));
+    border: 1px solid var(--err);
+    color: var(--text);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 12.5px;
+    margin-bottom: 16px;
+  }
+  .warning-banner strong { color: var(--err); }
+</style>
+</head>
+<body>
+
+<h1>Bid2Have API Tester</h1>
+<p class="subtitle">
+  Guía interactiva para probar cada endpoint del contrato contra tu backend local. Abrí este archivo directo en el
+  navegador (doble clic) — no depende del dev server de Vite. Los endpoints marcados <span class="auth-note">auth</span>
+  necesitan el token pegado abajo; <span class="auth-note">admin</span> además requiere un usuario con rol SUPERADMIN.
+</p>
+
+<div class="warning-banner">
+  <strong>Antes de usarlo:</strong> el backend (<code>../Bid2Have/src/index.ts</code>) no tiene middleware de CORS en
+  las rutas REST — solo Socket.IO permite cualquier origen. Si ves "Failed to fetch" o requests que nunca llegan,
+  es eso (no un bug de esta página): el navegador bloquea el preflight <code>OPTIONS</code> porque no hay
+  <code>Access-Control-Allow-Origin</code> en la respuesta. Para que esto (y el propio frontend React en otro
+  puerto) funcione, hay que agregar <code>cors()</code> en <code>src/index.ts</code> del backend.
+</div>
+
+<div class="config">
+  <div class="field" style="flex:1; min-width:220px;">
+    <label for="cfg-baseurl">Base URL del backend</label>
+    <input id="cfg-baseurl" type="text" value="http://localhost:3000" />
+  </div>
+  <div class="token-row">
+    <div class="field" style="flex:1;">
+      <label for="cfg-token">Token (JWT) — se autocompleta tras /auth/google</label>
+      <input id="cfg-token" type="text" placeholder="pegá acá un JWT si ya tenés uno" />
+    </div>
+    <button type="button" class="secondary" onclick="clearToken()">Limpiar token</button>
+  </div>
+</div>
+
+<!-- ======================= AUTH ======================= -->
+<details open>
+  <summary>Auth</summary>
+  <div class="endpoints">
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method post">POST</span>
+        <span class="path">/auth/google</span>
+        <span class="status-badge" id="status-auth-google">—</span>
+      </div>
+      <p class="hint">Body: { idToken } → 200 { token, user }. El token de respuesta se guarda solo en el campo de arriba.</p>
+      <form id="form-auth-google">
+        <div class="field">
+          <label>idToken (Google ID token)</label>
+          <textarea name="idToken" placeholder="pegá acá un idToken real de Google Identity Services" required></textarea>
+        </div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/auth/me</span>
+        <span class="auth-note">auth</span>
+        <span class="status-badge" id="status-auth-me">—</span>
+      </div>
+      <p class="hint">Sin body. 200 { user } si el token es válido.</p>
+      <form id="form-auth-me">
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+  </div>
+</details>
+
+<!-- ======================= CATEGORIES ======================= -->
+<details>
+  <summary>Categorías</summary>
+  <div class="endpoints">
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/categories</span>
+        <span class="status-badge" id="status-categories-list">—</span>
+      </div>
+      <p class="hint">200 { categories: Category[] }</p>
+      <form id="form-categories-list"><button type="submit">Enviar</button></form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/categories/:id</span>
+        <span class="status-badge" id="status-categories-get">—</span>
+      </div>
+      <form id="form-categories-get">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method post">POST</span>
+        <span class="path">/categories</span>
+        <span class="auth-note">admin</span>
+        <span class="status-badge" id="status-categories-create">—</span>
+      </div>
+      <p class="hint">Body: { name, slug } → 201 { category } / 409 si ya existe</p>
+      <form id="form-categories-create">
+        <div class="field"><label>name</label><input name="name" required /></div>
+        <div class="field"><label>slug</label><input name="slug" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method patch">PATCH</span>
+        <span class="path">/categories/:id</span>
+        <span class="auth-note">admin</span>
+        <span class="status-badge" id="status-categories-update">—</span>
+      </div>
+      <p class="hint">Body: { name?, slug? } — dejá vacío lo que no quieras cambiar.</p>
+      <form id="form-categories-update">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <div class="field"><label>name (opcional)</label><input name="name" /></div>
+        <div class="field"><label>slug (opcional)</label><input name="slug" /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method delete">DELETE</span>
+        <span class="path">/categories/:id</span>
+        <span class="auth-note">admin</span>
+        <span class="status-badge" id="status-categories-delete">—</span>
+      </div>
+      <form id="form-categories-delete">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+  </div>
+</details>
+
+<!-- ======================= LISTINGS ======================= -->
+<details>
+  <summary>Listings</summary>
+  <div class="endpoints">
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/listings</span>
+        <span class="status-badge" id="status-listings-list">—</span>
+      </div>
+      <p class="hint">Sin lat/lng: todos. Con lat+lng: búsqueda por Haversine (radiusKm opcional).</p>
+      <form id="form-listings-list">
+        <div class="field"><label>lat (opcional)</label><input name="lat" type="number" step="any" /></div>
+        <div class="field"><label>lng (opcional)</label><input name="lng" type="number" step="any" /></div>
+        <div class="field"><label>radiusKm (opcional)</label><input name="radiusKm" type="number" step="any" /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/listings/:id</span>
+        <span class="status-badge" id="status-listings-get">—</span>
+      </div>
+      <form id="form-listings-get">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method post">POST</span>
+        <span class="path">/listings</span>
+        <span class="auth-note">auth</span>
+        <span class="status-badge" id="status-listings-create">—</span>
+      </div>
+      <p class="hint">auctionEndAt es requerido solo si saleMode = AUCTION. photos: una URL por línea.</p>
+      <form id="form-listings-create">
+        <div class="field"><label>title</label><input name="title" required /></div>
+        <div class="field"><label>description</label><input name="description" required /></div>
+        <div class="field"><label>categoryId</label><input name="categoryId" required /></div>
+        <div class="field">
+          <label>condition</label>
+          <select name="condition"><option value="NEW">NEW</option><option value="USED" selected>USED</option></select>
+        </div>
+        <div class="field"><label>price</label><input name="price" type="number" step="any" required /></div>
+        <div class="field"><label>currency</label><input name="currency" value="USD" /></div>
+        <div class="field"><label>lat</label><input name="lat" type="number" step="any" required /></div>
+        <div class="field"><label>lng</label><input name="lng" type="number" step="any" required /></div>
+        <div class="field">
+          <label>saleMode</label>
+          <select name="saleMode"><option value="FREE_OFFER">FREE_OFFER</option><option value="AUCTION">AUCTION</option></select>
+        </div>
+        <div class="field"><label>auctionEndAt (ISO, si AUCTION)</label><input name="auctionEndAt" type="datetime-local" /></div>
+        <div class="field"><label>photos (una URL por línea)</label><textarea name="photos"></textarea></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method patch">PATCH</span>
+        <span class="path">/listings/:id</span>
+        <span class="auth-note">auth (dueño/admin)</span>
+        <span class="status-badge" id="status-listings-update">—</span>
+      </div>
+      <p class="hint">Campos parciales — dejá vacío lo que no quieras tocar.</p>
+      <form id="form-listings-update">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <div class="field"><label>title</label><input name="title" /></div>
+        <div class="field"><label>description</label><input name="description" /></div>
+        <div class="field"><label>price</label><input name="price" type="number" step="any" /></div>
+        <div class="field"><label>currency</label><input name="currency" /></div>
+        <div class="field">
+          <label>condition</label>
+          <select name="condition"><option value="">(sin cambio)</option><option value="NEW">NEW</option><option value="USED">USED</option></select>
+        </div>
+        <div class="field">
+          <label>status</label>
+          <select name="status">
+            <option value="">(sin cambio)</option>
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="RESERVED">RESERVED</option>
+            <option value="SOLD">SOLD</option>
+            <option value="CANCELLED">CANCELLED</option>
+          </select>
+        </div>
+        <div class="field"><label>photos (una URL por línea)</label><textarea name="photos"></textarea></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method delete">DELETE</span>
+        <span class="path">/listings/:id</span>
+        <span class="auth-note">auth (dueño/admin)</span>
+        <span class="status-badge" id="status-listings-delete">—</span>
+      </div>
+      <form id="form-listings-delete">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+  </div>
+</details>
+
+<!-- ======================= OFFERS ======================= -->
+<details>
+  <summary>Ofertas</summary>
+  <div class="endpoints">
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method post">POST</span>
+        <span class="path">/offers</span>
+        <span class="auth-note">auth</span>
+        <span class="status-badge" id="status-offers-create">—</span>
+      </div>
+      <p class="hint">Body: { listingId, amount } → 201 { offer }</p>
+      <form id="form-offers-create">
+        <div class="field"><label>listingId</label><input name="listingId" required /></div>
+        <div class="field"><label>amount</label><input name="amount" type="number" step="any" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/listings/:listingId/offers</span>
+        <span class="auth-note">auth (dueño/admin)</span>
+        <span class="status-badge" id="status-offers-by-listing">—</span>
+      </div>
+      <form id="form-offers-by-listing">
+        <div class="field"><label>listingId</label><input name="listingId" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/offers/:id</span>
+        <span class="auth-note">auth (parte)</span>
+        <span class="status-badge" id="status-offers-get">—</span>
+      </div>
+      <form id="form-offers-get">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method post">POST</span>
+        <span class="path">/offers/:id/accept</span>
+        <span class="auth-note">auth (dueño listing)</span>
+        <span class="status-badge" id="status-offers-accept">—</span>
+      </div>
+      <p class="hint">Crea el Chat automáticamente.</p>
+      <form id="form-offers-accept">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method post">POST</span>
+        <span class="path">/offers/:id/reject</span>
+        <span class="auth-note">auth (dueño listing)</span>
+        <span class="status-badge" id="status-offers-reject">—</span>
+      </div>
+      <form id="form-offers-reject">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method post">POST</span>
+        <span class="path">/offers/:id/counter</span>
+        <span class="auth-note">auth (dueño listing)</span>
+        <span class="status-badge" id="status-offers-counter">—</span>
+      </div>
+      <p class="hint">Body: { amount } → 201 { offer } (nueva oferta hija)</p>
+      <form id="form-offers-counter">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <div class="field"><label>amount</label><input name="amount" type="number" step="any" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+  </div>
+</details>
+
+<!-- ======================= CHAT ======================= -->
+<details>
+  <summary>Chat — historial (REST)</summary>
+  <div class="endpoints">
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/chats</span>
+        <span class="auth-note">auth</span>
+        <span class="status-badge" id="status-chats-list">—</span>
+      </div>
+      <form id="form-chats-list"><button type="submit">Enviar</button></form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/chats/:id</span>
+        <span class="auth-note">auth (parte)</span>
+        <span class="status-badge" id="status-chats-get">—</span>
+      </div>
+      <form id="form-chats-get">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/chats/:chatId/messages</span>
+        <span class="auth-note">auth (parte)</span>
+        <span class="status-badge" id="status-chats-messages">—</span>
+      </div>
+      <form id="form-chats-messages">
+        <div class="field"><label>chatId</label><input name="chatId" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+  </div>
+</details>
+
+<details>
+  <summary>Chat — tiempo real (Socket.IO)</summary>
+  <div class="endpoints">
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span>Conexión</span>
+        <span class="socket-status" id="socket-status">desconectado</span>
+      </div>
+      <p class="hint">Usa el token de arriba en el handshake (auth: { token }). Conectá antes de unirte a un chat.</p>
+      <div style="display:flex; gap:6px;">
+        <button type="button" onclick="connectSocket()">Conectar</button>
+        <button type="button" class="secondary" onclick="disconnectSocket()">Desconectar</button>
+      </div>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head"><span class="method post">emit</span><span class="path">join_chat</span></div>
+      <form id="form-join-chat">
+        <div class="field"><label>chatId</label><input name="chatId" required /></div>
+        <button type="submit">Unirme</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head"><span class="method post">emit</span><span class="path">send_message</span></div>
+      <form id="form-send-message">
+        <div class="field"><label>chatId</label><input name="chatId" required /></div>
+        <div class="field" style="flex:1;"><label>content</label><input name="content" required style="width:100%;" /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head"><span>Eventos recibidos (new_message / error)</span></div>
+      <div id="chat-events">—</div>
+    </div>
+  </div>
+</details>
+
+<!-- ======================= RATINGS ======================= -->
+<details>
+  <summary>Ratings</summary>
+  <div class="endpoints">
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method post">POST</span>
+        <span class="path">/offers/:offerId/ratings</span>
+        <span class="auth-note">auth (parte de la oferta)</span>
+        <span class="status-badge" id="status-ratings-create">—</span>
+      </div>
+      <p class="hint">Body: { score, comment? } → 201 { rating }. Requiere que la oferta esté ACCEPTED.</p>
+      <form id="form-ratings-create">
+        <div class="field"><label>offerId</label><input name="offerId" required /></div>
+        <div class="field"><label>score (1-5)</label><input name="score" type="number" min="1" max="5" value="5" required /></div>
+        <div class="field" style="flex:1;"><label>comment (opcional)</label><input name="comment" style="width:100%;" /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/users/:userId/ratings</span>
+        <span class="status-badge" id="status-ratings-list">—</span>
+      </div>
+      <form id="form-ratings-list">
+        <div class="field"><label>userId</label><input name="userId" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+  </div>
+</details>
+
+<!-- ======================= REPORTS ======================= -->
+<details>
+  <summary>Reportes</summary>
+  <div class="endpoints">
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method post">POST</span>
+        <span class="path">/reports</span>
+        <span class="auth-note">auth</span>
+        <span class="status-badge" id="status-reports-create">—</span>
+      </div>
+      <p class="hint">Para LISTING mandá listingId (no targetUserId); para USER, targetUserId (no listingId).</p>
+      <form id="form-reports-create">
+        <div class="field">
+          <label>targetType</label>
+          <select name="targetType"><option value="LISTING">LISTING</option><option value="USER">USER</option></select>
+        </div>
+        <div class="field"><label>listingId (si LISTING)</label><input name="listingId" /></div>
+        <div class="field"><label>targetUserId (si USER)</label><input name="targetUserId" /></div>
+        <div class="field"><label>reason</label><input name="reason" required /></div>
+        <div class="field" style="flex:1;"><label>description (opcional)</label><input name="description" style="width:100%;" /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/reports</span>
+        <span class="auth-note">admin</span>
+        <span class="status-badge" id="status-reports-list">—</span>
+      </div>
+      <form id="form-reports-list">
+        <div class="field">
+          <label>status (opcional)</label>
+          <select name="status">
+            <option value="">(todos)</option>
+            <option value="PENDING">PENDING</option>
+            <option value="REVIEWED">REVIEWED</option>
+            <option value="DISMISSED">DISMISSED</option>
+          </select>
+        </div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method patch">PATCH</span>
+        <span class="path">/reports/:id/review</span>
+        <span class="auth-note">admin</span>
+        <span class="status-badge" id="status-reports-review">—</span>
+      </div>
+      <form id="form-reports-review">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method patch">PATCH</span>
+        <span class="path">/reports/:id/dismiss</span>
+        <span class="auth-note">admin</span>
+        <span class="status-badge" id="status-reports-dismiss">—</span>
+      </div>
+      <form id="form-reports-dismiss">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+  </div>
+</details>
+
+<!-- ======================= NOTIFICATIONS ======================= -->
+<details>
+  <summary>Notificaciones</summary>
+  <div class="endpoints">
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/notifications</span>
+        <span class="auth-note">auth</span>
+        <span class="status-badge" id="status-notifications-list">—</span>
+      </div>
+      <form id="form-notifications-list">
+        <div class="field">
+          <label><input type="checkbox" name="unread" value="true" style="width:auto;" /> solo no leídas</label>
+        </div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method patch">PATCH</span>
+        <span class="path">/notifications/:id/read</span>
+        <span class="auth-note">auth (dueño)</span>
+        <span class="status-badge" id="status-notifications-read">—</span>
+      </div>
+      <form id="form-notifications-read">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+  </div>
+</details>
+
+<!-- ======================= FOLLOWS ======================= -->
+<details>
+  <summary>Seguir vendedores</summary>
+  <div class="endpoints">
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/users/following</span>
+        <span class="auth-note">auth</span>
+        <span class="status-badge" id="status-follows-list">—</span>
+      </div>
+      <form id="form-follows-list"><button type="submit">Enviar</button></form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method post">POST</span>
+        <span class="path">/users/:userId/follow</span>
+        <span class="auth-note">auth</span>
+        <span class="status-badge" id="status-follows-create">—</span>
+      </div>
+      <form id="form-follows-create">
+        <div class="field"><label>userId</label><input name="userId" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method delete">DELETE</span>
+        <span class="path">/users/:userId/follow</span>
+        <span class="auth-note">auth</span>
+        <span class="status-badge" id="status-follows-delete">—</span>
+      </div>
+      <form id="form-follows-delete">
+        <div class="field"><label>userId</label><input name="userId" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+  </div>
+</details>
+
+<!-- ======================= SUPERADMIN USERS ======================= -->
+<details>
+  <summary>Superadmin — Usuarios</summary>
+  <div class="endpoints">
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method get">GET</span>
+        <span class="path">/users</span>
+        <span class="auth-note">admin</span>
+        <span class="status-badge" id="status-users-list">—</span>
+      </div>
+      <form id="form-users-list">
+        <div class="field">
+          <label>status (opcional)</label>
+          <select name="status">
+            <option value="">(todos)</option>
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="SUSPENDED">SUSPENDED</option>
+          </select>
+        </div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method patch">PATCH</span>
+        <span class="path">/users/:id/suspend</span>
+        <span class="auth-note">admin</span>
+        <span class="status-badge" id="status-users-suspend">—</span>
+      </div>
+      <form id="form-users-suspend">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+    <div class="endpoint">
+      <div class="endpoint-head">
+        <span class="method patch">PATCH</span>
+        <span class="path">/users/:id/reactivate</span>
+        <span class="auth-note">admin</span>
+        <span class="status-badge" id="status-users-reactivate">—</span>
+      </div>
+      <form id="form-users-reactivate">
+        <div class="field"><label>id</label><input name="id" required /></div>
+        <button type="submit">Enviar</button>
+      </form>
+    </div>
+
+  </div>
+</details>
+
+<!-- ======================= LOG ======================= -->
+<div id="log-section">
+  <h2 style="font-size:14px; margin: 16px 0 6px;">Historial de llamadas (más reciente arriba)</h2>
+  <div id="log"></div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/socket.io-client@4.8.4/dist/socket.io.min.js"></script>
+<script>
+  const state = {
+    baseUrl: localStorage.getItem('tester_baseUrl') || 'http://localhost:3000',
+    token: localStorage.getItem('tester_token') || '',
+  };
+
+  const baseUrlInput = document.getElementById('cfg-baseurl');
+  const tokenInput = document.getElementById('cfg-token');
+  baseUrlInput.value = state.baseUrl;
+  tokenInput.value = state.token;
+
+  baseUrlInput.addEventListener('input', () => {
+    state.baseUrl = baseUrlInput.value.trim();
+    localStorage.setItem('tester_baseUrl', state.baseUrl);
+  });
+  tokenInput.addEventListener('input', () => {
+    state.token = tokenInput.value.trim();
+    localStorage.setItem('tester_token', state.token);
+  });
+
+  function clearToken() {
+    state.token = '';
+    tokenInput.value = '';
+    localStorage.removeItem('tester_token');
+  }
+
+  function qs(params) {
+    const entries = Object.entries(params).filter(([, v]) => v !== undefined && v !== null && v !== '');
+    if (entries.length === 0) return '';
+    return '?' + entries.map(([k, v]) => encodeURIComponent(k) + '=' + encodeURIComponent(v)).join('&');
+  }
+
+  function logCall({ method, path, body, status, data, errorText }) {
+    const log = document.getElementById('log');
+    const entry = document.createElement('div');
+    entry.className = 'log-entry';
+    const ok = !errorText && status < 400;
+    const time = new Date().toLocaleTimeString();
+    entry.innerHTML = `
+      <div class="log-head">
+        <span class="status-badge ${errorText ? 'status-err' : ok ? 'status-ok' : 'status-err'}">${errorText ? 'ERR' : status}</span>
+        <span><strong>${method}</strong> ${path}</span>
+        <span>${time}</span>
+      </div>
+      ${body !== undefined ? `<pre>// body enviado\n${JSON.stringify(body, null, 2)}</pre>` : ''}
+      <pre>// respuesta\n${errorText ? errorText : JSON.stringify(data, null, 2)}</pre>
+    `;
+    log.prepend(entry);
+  }
+
+  async function callApi(method, path, body, statusEl) {
+    const url = state.baseUrl.replace(/\/$/, '') + path;
+    const headers = { 'Content-Type': 'application/json' };
+    if (state.token) headers['Authorization'] = 'Bearer ' + state.token;
+    const opts = { method, headers };
+    if (body !== undefined) opts.body = JSON.stringify(body);
+
+    let status = 0, data = null, errorText = null;
+    try {
+      const res = await fetch(url, opts);
+      status = res.status;
+      if (status !== 204) {
+        data = await res.json().catch(() => null);
+      }
+    } catch (e) {
+      errorText = 'No se pudo conectar: ' + e.message;
+    }
+
+    logCall({ method, path, body, status, data, errorText });
+
+    if (statusEl) {
+      statusEl.textContent = errorText ? 'ERR' : String(status);
+      statusEl.className = 'status-badge ' + (errorText || status >= 400 ? 'status-err' : 'status-ok');
+    }
+
+    if (!errorText && status < 400 && data && data.token) {
+      state.token = data.token;
+      tokenInput.value = data.token;
+      localStorage.setItem('tester_token', data.token);
+    }
+
+    return { status, data, errorText };
+  }
+
+  function fd(form) {
+    return Object.fromEntries(new FormData(form).entries());
+  }
+
+  function photosFromTextarea(value) {
+    return (value || '')
+      .split('\n')
+      .map((s) => s.trim())
+      .filter(Boolean);
+  }
+
+  function wire(formId, handler) {
+    const form = document.getElementById(formId);
+    const statusEl = document.getElementById('status-' + formId.replace('form-', ''));
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handler(fd(form), statusEl);
+    });
+  }
+
+  // ---------- Auth ----------
+  wire('form-auth-google', (v, s) => callApi('POST', '/auth/google', { idToken: v.idToken }, s));
+  wire('form-auth-me', (v, s) => callApi('GET', '/auth/me', undefined, s));
+
+  // ---------- Categories ----------
+  wire('form-categories-list', (v, s) => callApi('GET', '/categories', undefined, s));
+  wire('form-categories-get', (v, s) => callApi('GET', `/categories/${v.id}`, undefined, s));
+  wire('form-categories-create', (v, s) => callApi('POST', '/categories', { name: v.name, slug: v.slug }, s));
+  wire('form-categories-update', (v, s) => {
+    const body = {};
+    if (v.name) body.name = v.name;
+    if (v.slug) body.slug = v.slug;
+    callApi('PATCH', `/categories/${v.id}`, body, s);
+  });
+  wire('form-categories-delete', (v, s) => callApi('DELETE', `/categories/${v.id}`, undefined, s));
+
+  // ---------- Listings ----------
+  wire('form-listings-list', (v, s) => {
+    const query = qs({ lat: v.lat, lng: v.lng, radiusKm: v.radiusKm });
+    callApi('GET', `/listings${query}`, undefined, s);
+  });
+  wire('form-listings-get', (v, s) => callApi('GET', `/listings/${v.id}`, undefined, s));
+  wire('form-listings-create', (v, s) => {
+    const body = {
+      title: v.title,
+      description: v.description,
+      categoryId: v.categoryId,
+      condition: v.condition,
+      price: Number(v.price),
+      currency: v.currency || undefined,
+      lat: Number(v.lat),
+      lng: Number(v.lng),
+      saleMode: v.saleMode,
+      photos: photosFromTextarea(v.photos),
+    };
+    if (v.saleMode === 'AUCTION' && v.auctionEndAt) {
+      body.auctionEndAt = new Date(v.auctionEndAt).toISOString();
+    }
+    callApi('POST', '/listings', body, s);
+  });
+  wire('form-listings-update', (v, s) => {
+    const body = {};
+    if (v.title) body.title = v.title;
+    if (v.description) body.description = v.description;
+    if (v.price) body.price = Number(v.price);
+    if (v.currency) body.currency = v.currency;
+    if (v.condition) body.condition = v.condition;
+    if (v.status) body.status = v.status;
+    if (v.photos) body.photos = photosFromTextarea(v.photos);
+    callApi('PATCH', `/listings/${v.id}`, body, s);
+  });
+  wire('form-listings-delete', (v, s) => callApi('DELETE', `/listings/${v.id}`, undefined, s));
+
+  // ---------- Offers ----------
+  wire('form-offers-create', (v, s) => callApi('POST', '/offers', { listingId: v.listingId, amount: Number(v.amount) }, s));
+  wire('form-offers-by-listing', (v, s) => callApi('GET', `/listings/${v.listingId}/offers`, undefined, s));
+  wire('form-offers-get', (v, s) => callApi('GET', `/offers/${v.id}`, undefined, s));
+  wire('form-offers-accept', (v, s) => callApi('POST', `/offers/${v.id}/accept`, undefined, s));
+  wire('form-offers-reject', (v, s) => callApi('POST', `/offers/${v.id}/reject`, undefined, s));
+  wire('form-offers-counter', (v, s) => callApi('POST', `/offers/${v.id}/counter`, { amount: Number(v.amount) }, s));
+
+  // ---------- Chat (REST) ----------
+  wire('form-chats-list', (v, s) => callApi('GET', '/chats', undefined, s));
+  wire('form-chats-get', (v, s) => callApi('GET', `/chats/${v.id}`, undefined, s));
+  wire('form-chats-messages', (v, s) => callApi('GET', `/chats/${v.chatId}/messages`, undefined, s));
+
+  // ---------- Ratings ----------
+  wire('form-ratings-create', (v, s) => {
+    const body = { score: Number(v.score) };
+    if (v.comment) body.comment = v.comment;
+    callApi('POST', `/offers/${v.offerId}/ratings`, body, s);
+  });
+  wire('form-ratings-list', (v, s) => callApi('GET', `/users/${v.userId}/ratings`, undefined, s));
+
+  // ---------- Reports ----------
+  wire('form-reports-create', (v, s) => {
+    const body = { targetType: v.targetType, reason: v.reason };
+    if (v.targetType === 'LISTING' && v.listingId) body.listingId = v.listingId;
+    if (v.targetType === 'USER' && v.targetUserId) body.targetUserId = v.targetUserId;
+    if (v.description) body.description = v.description;
+    callApi('POST', '/reports', body, s);
+  });
+  wire('form-reports-list', (v, s) => callApi('GET', `/reports${qs({ status: v.status })}`, undefined, s));
+  wire('form-reports-review', (v, s) => callApi('PATCH', `/reports/${v.id}/review`, undefined, s));
+  wire('form-reports-dismiss', (v, s) => callApi('PATCH', `/reports/${v.id}/dismiss`, undefined, s));
+
+  // ---------- Notifications ----------
+  wire('form-notifications-list', (v, s) => callApi('GET', `/notifications${qs({ unread: v.unread })}`, undefined, s));
+  wire('form-notifications-read', (v, s) => callApi('PATCH', `/notifications/${v.id}/read`, undefined, s));
+
+  // ---------- Follows ----------
+  wire('form-follows-list', (v, s) => callApi('GET', '/users/following', undefined, s));
+  wire('form-follows-create', (v, s) => callApi('POST', `/users/${v.userId}/follow`, undefined, s));
+  wire('form-follows-delete', (v, s) => callApi('DELETE', `/users/${v.userId}/follow`, undefined, s));
+
+  // ---------- Superadmin users ----------
+  wire('form-users-list', (v, s) => callApi('GET', `/users${qs({ status: v.status })}`, undefined, s));
+  wire('form-users-suspend', (v, s) => callApi('PATCH', `/users/${v.id}/suspend`, undefined, s));
+  wire('form-users-reactivate', (v, s) => callApi('PATCH', `/users/${v.id}/reactivate`, undefined, s));
+
+  // ---------- Socket.IO ----------
+  let socket = null;
+  const socketStatusEl = document.getElementById('socket-status');
+  const chatEventsEl = document.getElementById('chat-events');
+
+  function logChatEvent(line) {
+    const time = new Date().toLocaleTimeString();
+    chatEventsEl.textContent = `[${time}] ${line}\n` + (chatEventsEl.textContent === '—' ? '' : chatEventsEl.textContent);
+  }
+
+  function connectSocket() {
+    if (socket) {
+      socket.disconnect();
+    }
+    socket = io(state.baseUrl, { auth: { token: state.token } });
+
+    socket.on('connect', () => {
+      socketStatusEl.textContent = 'conectado (' + socket.id + ')';
+      socketStatusEl.classList.add('connected');
+      logChatEvent('connect');
+    });
+    socket.on('disconnect', () => {
+      socketStatusEl.textContent = 'desconectado';
+      socketStatusEl.classList.remove('connected');
+      logChatEvent('disconnect');
+    });
+    socket.on('connect_error', (err) => {
+      socketStatusEl.textContent = 'error de conexión';
+      socketStatusEl.classList.remove('connected');
+      logChatEvent('connect_error: ' + err.message);
+    });
+    socket.on('new_message', (message) => {
+      logChatEvent('new_message: ' + JSON.stringify(message));
+    });
+    socket.on('error', (err) => {
+      logChatEvent('error: ' + JSON.stringify(err));
+    });
+  }
+
+  function disconnectSocket() {
+    if (socket) {
+      socket.disconnect();
+      socket = null;
+    }
+  }
+
+  document.getElementById('form-join-chat').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!socket || !socket.connected) {
+      logChatEvent('no conectado — presioná "Conectar" primero');
+      return;
+    }
+    const { chatId } = fd(e.target);
+    socket.emit('join_chat', { chatId });
+    logChatEvent('emit join_chat: ' + chatId);
+  });
+
+  document.getElementById('form-send-message').addEventListener('submit', (e) => {
+    e.preventDefault();
+    if (!socket || !socket.connected) {
+      logChatEvent('no conectado — presioná "Conectar" primero');
+      return;
+    }
+    const { chatId, content } = fd(e.target);
+    socket.emit('send_message', { chatId, content });
+    logChatEvent('emit send_message: ' + JSON.stringify({ chatId, content }));
+    e.target.reset();
+    e.target.elements.chatId.value = chatId;
+  });
+</script>
+
+</body>
+</html>
