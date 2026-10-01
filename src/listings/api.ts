@@ -24,10 +24,27 @@ export interface CreateListingInput {
   auctionEndAt?: string
 }
 
-export function useListings() {
+export interface NearbyParams {
+  lat: number
+  lng: number
+  radiusKm?: number
+}
+
+export function useListings(nearby?: NearbyParams) {
   return useQuery({
-    queryKey: ['listings'],
-    queryFn: () => apiFetch<ListingsResponse>('/listings'),
+    queryKey: ['listings', nearby ?? 'all'],
+    queryFn: () => {
+      if (!nearby) {
+        return apiFetch<ListingsResponse>('/listings')
+      }
+
+      const params = new URLSearchParams({ lat: String(nearby.lat), lng: String(nearby.lng) })
+      if (nearby.radiusKm !== undefined) {
+        params.set('radiusKm', String(nearby.radiusKm))
+      }
+
+      return apiFetch<ListingsResponse>(`/listings?${params.toString()}`)
+    },
   })
 }
 
