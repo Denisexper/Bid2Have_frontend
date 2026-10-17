@@ -6,10 +6,11 @@ interface FollowingResponse {
   follows: Follow[]
 }
 
-export function useFollowing() {
+export function useFollowing(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ['follows'],
     queryFn: () => apiFetch<FollowingResponse>('/users/following'),
+    enabled: options?.enabled ?? true,
   })
 }
 

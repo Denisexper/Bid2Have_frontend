@@ -23,14 +23,14 @@ function App() {
         <BrowserRouter>
           <Routes>
             <Route path="/login" element={<LoginPage />} />
-            <Route element={<ProtectedRoute />}>
-              <Route element={<AppLayout />}>
-                <Route path="/" element={<HomePage />} />
+            <Route element={<AppLayout />}>
+              <Route path="/" element={<HomePage />} />
+              <Route path="/listings/:id" element={<ListingDetailPage />} />
+              <Route element={<ProtectedRoute />}>
                 <Route path="/chats" element={<ChatsPage />} />
                 <Route path="/chats/:id" element={<ChatDetailPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
                 <Route path="/listings/new" element={<NewListingPage />} />
-                <Route path="/listings/:id" element={<ListingDetailPage />} />
                 <Route element={<SuperAdminRoute />}>
                   <Route path="/admin/reports" element={<AdminReportsPage />} />
                   <Route path="/admin/users" element={<AdminUsersPage />} />
