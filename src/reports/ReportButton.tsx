@@ -54,7 +54,7 @@ export function ReportButton({ label, targetType, listingId, targetUserId }: Rep
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-lg bg-base-200 p-2">
+    <form onSubmit={handleSubmit} className="border border-base-300 bg-base-200 p-2">
       <input
         type="text"
         className="input input-bordered input-xs w-full"

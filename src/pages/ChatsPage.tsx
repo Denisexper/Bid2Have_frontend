@@ -4,6 +4,7 @@ import { useChats } from '../chat/api'
 import type { Chat } from '../chat/types'
 import { useListing } from '../listings/api'
 import { formatRelativeTime } from '../listings/format'
+import { IconChat } from '../components/icons'
 
 export function ChatsPage() {
   const { data, isLoading, isError } = useChats()
@@ -29,7 +30,9 @@ export function ChatsPage() {
   if (chats.length === 0) {
     return (
       <div className="flex flex-col items-center gap-2 py-16 text-center">
-        <span className="text-4xl">💬</span>
+        <span className="h-10 w-10 text-base-content/25">
+          <IconChat />
+        </span>
         <h2 className="font-bold">Todavía no tenés chats</h2>
         <p className="text-sm text-base-content/60">
           Se crean automáticamente cuando se acepta una oferta.
@@ -57,10 +60,10 @@ function ChatListItem({ chat }: { chat: Chat }) {
   return (
     <Link
       to={`/chats/${chat.id}`}
-      className="flex items-center gap-3 rounded-2xl bg-base-100 p-3 shadow-sm active:scale-[0.99]"
+      className="flex items-center gap-3 border-2 border-base-300 bg-base-100 p-3 active:scale-[0.99]"
     >
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 text-xl">
-        💬
+      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 p-2.5">
+        <IconChat />
       </div>
       <div className="min-w-0 flex-1">
         <h3 className="truncate text-sm font-bold">{title}</h3>

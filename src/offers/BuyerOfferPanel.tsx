@@ -20,7 +20,7 @@ export function BuyerOfferPanel({ listing }: BuyerOfferPanelProps) {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-between rounded-2xl bg-base-100 p-4 shadow-sm">
+      <div className="flex items-center justify-between border-2 border-base-300 bg-base-100 p-4">
         <span className="text-sm text-base-content/70">Iniciá sesión para hacer una oferta.</span>
         <Link to="/login" state={{ from: location }} className="btn btn-primary btn-sm">
           Iniciar sesión
@@ -56,7 +56,7 @@ function BuyerOfferPanelInner({ listing, userId }: { listing: Listing; userId: s
   if (offerId) {
     if (isLoadingOffer) {
       return (
-        <div className="flex justify-center rounded-2xl bg-base-100 p-4 shadow-sm">
+        <div className="flex justify-center border-2 border-base-300 bg-base-100 p-4">
           <span className="loading loading-spinner loading-sm text-primary" />
         </div>
       )
@@ -68,7 +68,7 @@ function BuyerOfferPanelInner({ listing, userId }: { listing: Listing; userId: s
       const chat = chatsData?.chats.find((c) => c.listingId === listing.id && c.buyerId === userId)
 
       return (
-        <div className="rounded-2xl bg-base-100 p-4 shadow-sm">
+        <div className="border-2 border-base-300 bg-base-100 p-4">
           <h2 className="mb-1 text-sm font-bold text-base-content/70">Tu oferta</h2>
           <p className="text-sm">
             {formatPrice(offer.amount, listing.currency)} · {offerStatusLabels[offer.status]}
@@ -107,14 +107,14 @@ function BuyerOfferPanelInner({ listing, userId }: { listing: Listing; userId: s
 
   if (listing.status !== 'ACTIVE') {
     return (
-      <div className="rounded-2xl bg-base-100 p-4 text-sm text-base-content/60 shadow-sm">
+      <div className="border-2 border-base-300 bg-base-100 p-4 text-sm text-base-content/60">
         Esta publicación ya no está disponible para ofertas.
       </div>
     )
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-2xl bg-base-100 p-4 shadow-sm">
+    <form onSubmit={handleSubmit} className="border-2 border-base-300 bg-base-100 p-4">
       <h2 className="mb-2 text-sm font-bold text-base-content/70">Hacer una oferta</h2>
       <div className="flex gap-2">
         <input

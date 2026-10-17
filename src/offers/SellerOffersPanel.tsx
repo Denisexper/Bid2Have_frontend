@@ -15,7 +15,7 @@ export function SellerOffersPanel({ listingId, currency }: SellerOffersPanelProp
   const { data, isLoading, isError } = useListingOffers(listingId, true)
 
   return (
-    <div className="rounded-2xl bg-base-100 p-4 shadow-sm">
+    <div className="border-2 border-base-300 bg-base-100 p-4">
       <h2 className="mb-2 text-sm font-bold text-base-content/70">Ofertas recibidas</h2>
 
       {isLoading && (
@@ -62,7 +62,7 @@ function OfferRow({ offer, listingId, currency }: { offer: Offer; listingId: str
   }
 
   return (
-    <li className="rounded-lg bg-base-200 p-3 text-sm">
+    <li className="border border-base-300 bg-base-200 p-3 text-sm">
       <div className="flex items-center justify-between">
         <span className="font-mono font-bold">{formatPrice(offer.amount, currency)}</span>
         <span className="badge badge-ghost badge-sm">{offerStatusLabels[offer.status]}</span>

@@ -65,7 +65,7 @@ function ReportRow({ report }: { report: Report }) {
   const isPending = review.isPending || dismiss.isPending
 
   return (
-    <li className="rounded-2xl bg-base-100 p-3 shadow-sm">
+    <li className="border-2 border-base-300 bg-base-100 p-3">
       <div className="flex items-center justify-between">
         <span className="badge badge-ghost badge-sm">{reportTargetTypeLabels[report.targetType]}</span>
         <span className="badge badge-outline badge-sm">{reportStatusLabels[report.status]}</span>

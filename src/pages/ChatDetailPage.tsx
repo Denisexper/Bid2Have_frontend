@@ -84,7 +84,7 @@ function ChatThread({ chatId }: { chatId: string }) {
     <div className="flex h-[calc(100vh-9.5rem)] flex-col">
       {listingData && <h1 className="mb-2 truncate text-sm font-bold">{listingData.listing.title}</h1>}
 
-      <div className="flex-1 overflow-y-auto rounded-2xl bg-base-100 p-3">
+      <div className="flex-1 overflow-y-auto border-2 border-base-300 bg-base-100 p-3">
         <div className="flex flex-col gap-2">
           {messages.map((message) => {
             const isMine = message.senderId === user?.id

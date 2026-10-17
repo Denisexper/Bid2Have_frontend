@@ -4,6 +4,7 @@ import { useCategories } from '../categories/api'
 import { useCreateListing } from '../listings/api'
 import type { ListingCondition, SaleMode } from '../listings/types'
 import { ApiError } from '../api/client'
+import { IconPin } from '../components/icons'
 
 type GeoStatus = 'loading' | 'success' | 'error'
 
@@ -209,9 +210,23 @@ export function NewListingPage() {
           />
         </label>
 
-        <div className="rounded-lg bg-base-100 p-3 text-sm">
-          {geoStatus === 'loading' && <span className="text-base-content/60">📍 Obteniendo tu ubicación...</span>}
-          {geoStatus === 'success' && <span className="text-success">📍 Ubicación lista</span>}
+        <div className="border border-base-300 bg-base-100 p-3 text-sm">
+          {geoStatus === 'loading' && (
+            <span className="inline-flex items-center gap-1.5 text-base-content/60">
+              <span className="h-3.5 w-3.5">
+                <IconPin />
+              </span>
+              Obteniendo tu ubicación...
+            </span>
+          )}
+          {geoStatus === 'success' && (
+            <span className="inline-flex items-center gap-1.5 text-success">
+              <span className="h-3.5 w-3.5">
+                <IconPin />
+              </span>
+              Ubicación lista
+            </span>
+          )}
           {geoStatus === 'error' && (
             <div className="flex items-center justify-between">
               <span className="text-error">No pudimos obtener tu ubicación.</span>

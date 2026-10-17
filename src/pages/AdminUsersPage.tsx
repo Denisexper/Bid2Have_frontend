@@ -66,7 +66,7 @@ function UserRow({ user }: { user: AdminUser }) {
   const initial = user.name.charAt(0).toUpperCase()
 
   return (
-    <li className="flex flex-col gap-1 rounded-2xl bg-base-100 p-3 shadow-sm">
+    <li className="flex flex-col gap-1 border-2 border-base-300 bg-base-100 p-3">
       <div className="flex items-center gap-3">
         {user.avatarUrl ? (
           <img src={user.avatarUrl} alt={user.name} className="h-10 w-10 shrink-0 rounded-full object-cover" />

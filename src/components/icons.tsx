@@ -96,3 +96,22 @@ export function IconSearch({ className }: IconProps) {
     </svg>
   )
 }
+
+interface StarProps extends IconProps {
+  filled?: boolean
+}
+
+export function IconStar({ className, filled = true }: StarProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill={filled ? 'currentColor' : 'none'}
+      stroke="currentColor"
+      strokeWidth="1.4"
+      strokeLinejoin="round"
+      className={className ?? base}
+    >
+      <path d="M12 2.5l2.9 6 6.5.8-4.8 4.5 1.2 6.5-5.8-3.2-5.8 3.2 1.2-6.5-4.8-4.5 6.5-.8z" />
+    </svg>
+  )
+}

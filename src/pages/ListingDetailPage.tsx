@@ -8,6 +8,7 @@ import { SellerOffersPanel } from '../offers/SellerOffersPanel'
 import { FollowButton } from '../follows/FollowButton'
 import { ReportButton } from '../reports/ReportButton'
 import { SellerListingActions } from '../listings/SellerListingActions'
+import { IconClock, IconImage } from '../components/icons'
 
 const statusLabels: Record<string, string> = {
   ACTIVE: 'Activa',
@@ -45,7 +46,7 @@ export function ListingDetailPage() {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex gap-2 overflow-x-auto rounded-2xl bg-base-200">
+      <div className="flex gap-2 overflow-x-auto border-2 border-base-300 bg-base-200">
         {listing.photos.length > 0 ? (
           listing.photos.map((photo) => (
             <img
@@ -56,19 +57,28 @@ export function ListingDetailPage() {
             />
           ))
         ) : (
-          <div className="flex aspect-video w-full items-center justify-center text-5xl text-base-content/25">
-            📷
+          <div className="flex aspect-video w-full items-center justify-center text-base-content/25">
+            <span className="h-14 w-14">
+              <IconImage />
+            </span>
           </div>
         )}
       </div>
 
-      <div className="rounded-2xl bg-base-100 p-4 shadow-sm">
+      <div className="border-2 border-base-300 bg-base-100 p-4">
         <h1 className="text-lg font-bold">{listing.title}</h1>
         <div className="mt-1 flex items-center gap-2">
           <span className="font-mono text-xl font-extrabold tabular-nums">
             {formatPrice(listing.price, listing.currency)}
           </span>
-          {countdown && <span className="badge badge-error badge-sm">🔴 {countdown}</span>}
+          {countdown && (
+            <span className="badge badge-error badge-sm gap-1">
+              <span className="h-3 w-3">
+                <IconClock />
+              </span>
+              {countdown}
+            </span>
+          )}
         </div>
 
         <div className="mt-2 flex flex-wrap gap-1.5">

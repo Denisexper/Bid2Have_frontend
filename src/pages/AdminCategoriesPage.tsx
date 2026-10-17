@@ -65,7 +65,7 @@ function NewCategoryForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-2xl bg-base-100 p-4 shadow-sm">
+    <form onSubmit={handleSubmit} className="border-2 border-base-300 bg-base-100 p-4">
       <h2 className="mb-2 text-sm font-bold text-base-content/70">Nueva categoría</h2>
       <div className="flex flex-col gap-2 sm:flex-row">
         <input
@@ -126,7 +126,7 @@ function CategoryRow({ category }: { category: Category }) {
 
   if (isEditing) {
     return (
-      <li className="rounded-2xl bg-base-100 p-3 shadow-sm">
+      <li className="border-2 border-base-300 bg-base-100 p-3">
         <div className="flex flex-col gap-2 sm:flex-row">
           <input
             type="text"
@@ -159,7 +159,7 @@ function CategoryRow({ category }: { category: Category }) {
   }
 
   return (
-    <li className="flex flex-col gap-1 rounded-2xl bg-base-100 p-3 shadow-sm">
+    <li className="flex flex-col gap-1 border-2 border-base-300 bg-base-100 p-3">
       <div className="flex items-center justify-between gap-3">
         <div className="min-w-0">
           <h3 className="truncate text-sm font-bold">{category.name}</h3>

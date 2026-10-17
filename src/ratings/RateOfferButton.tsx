@@ -1,6 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { useCreateRating } from './api'
 import { hasRatedOffer, markOfferRated } from './ratedOfferStorage'
+import { IconStar } from '../components/icons'
 
 interface RateOfferButtonProps {
   offerId: string
@@ -40,17 +41,17 @@ export function RateOfferButton({ offerId, label }: RateOfferButtonProps) {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="rounded-lg bg-base-200 p-2">
-      <div className="flex gap-1 text-lg">
+    <form onSubmit={handleSubmit} className="border border-base-300 bg-base-200 p-2">
+      <div className="flex gap-1">
         {[1, 2, 3, 4, 5].map((value) => (
           <button
             key={value}
             type="button"
             onClick={() => setScore(value)}
             aria-label={`${value} estrellas`}
-            className={value <= score ? 'opacity-100' : 'opacity-30'}
+            className={`h-5 w-5 ${value <= score ? 'text-base-content' : 'text-base-content/25'}`}
           >
-            ⭐
+            <IconStar filled={value <= score} />
           </button>
         ))}
       </div>
