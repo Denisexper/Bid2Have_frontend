@@ -1,3 +1,5 @@
+import { Link, useLocation } from 'react-router-dom'
+import { useAuth } from '../auth/AuthContext'
 import { ApiError } from '../api/client'
 import { useFollowing, useFollowUser, useUnfollowUser } from './api'
 
@@ -6,9 +8,19 @@ interface FollowButtonProps {
 }
 
 export function FollowButton({ sellerId }: FollowButtonProps) {
-  const { data, isLoading } = useFollowing()
+  const { user } = useAuth()
+  const location = useLocation()
+  const { data, isLoading } = useFollowing({ enabled: Boolean(user) })
   const follow = useFollowUser()
   const unfollow = useUnfollowUser()
+
+  if (!user) {
+    return (
+      <Link to="/login" state={{ from: location }} className="btn btn-sm btn-outline">
+        Iniciá sesión para seguir
+      </Link>
+    )
+  }
 
   const existingFollow = data?.follows.find((f) => f.followingId === sellerId)
   const isPending = follow.isPending || unfollow.isPending

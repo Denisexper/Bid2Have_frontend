@@ -1,16 +1,18 @@
 import { useState } from 'react'
-import { Navigate } from 'react-router-dom'
+import { Navigate, useLocation, type Location } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { GoogleLoginButton } from '../auth/GoogleLoginButton'
 import { consumeSessionExpiredFlag } from '../api/client'
 
 export function LoginPage() {
   const { user } = useAuth()
+  const location = useLocation()
   const [error, setError] = useState<string | null>(null)
   const [showExpiredNotice] = useState(() => consumeSessionExpiredFlag())
 
   if (user) {
-    return <Navigate to="/" replace />
+    const from = (location.state as { from?: Location })?.from
+    return <Navigate to={from ?? '/'} replace />
   }
 
   return (

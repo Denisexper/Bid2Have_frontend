@@ -1,4 +1,6 @@
 import { useState, type FormEvent } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import { useAuth } from '../auth/AuthContext'
 import { ApiError } from '../api/client'
 import { useCreateReport } from './api'
 import type { ReportTargetType } from './types'
@@ -11,10 +13,20 @@ interface ReportButtonProps {
 }
 
 export function ReportButton({ label, targetType, listingId, targetUserId }: ReportButtonProps) {
+  const { user } = useAuth()
+  const location = useLocation()
   const [isOpen, setIsOpen] = useState(false)
   const [reason, setReason] = useState('')
   const [description, setDescription] = useState('')
   const createReport = useCreateReport()
+
+  if (!user) {
+    return (
+      <Link to="/login" state={{ from: location }} className="btn btn-ghost btn-xs">
+        {label}
+      </Link>
+    )
+  }
 
   if (createReport.isSuccess) {
     return <span className="text-xs text-base-content/50">✓ Reportado</span>

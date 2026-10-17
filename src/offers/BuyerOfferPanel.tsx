@@ -1,5 +1,5 @@
 import { useState, type FormEvent } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { ApiError } from '../api/client'
 import { useChats } from '../chat/api'
@@ -16,9 +16,17 @@ interface BuyerOfferPanelProps {
 
 export function BuyerOfferPanel({ listing }: BuyerOfferPanelProps) {
   const { user } = useAuth()
+  const location = useLocation()
 
   if (!user) {
-    return null
+    return (
+      <div className="flex items-center justify-between rounded-2xl bg-base-100 p-4 shadow-sm">
+        <span className="text-sm text-base-content/70">Iniciá sesión para hacer una oferta.</span>
+        <Link to="/login" state={{ from: location }} className="btn btn-primary btn-sm">
+          Iniciar sesión
+        </Link>
+      </div>
+    )
   }
 
   return <BuyerOfferPanelInner key={listing.id} listing={listing} userId={user.id} />
