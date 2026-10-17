@@ -2,6 +2,7 @@ import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { NotificationsBell } from '../notifications/NotificationsBell'
 import { useTheme } from '../theme/useTheme'
+import { IconMoon, IconSun } from './icons'
 
 export function TopBar() {
   const { user, logout } = useAuth()
@@ -11,16 +12,16 @@ export function TopBar() {
   const initial = user?.name?.charAt(0).toUpperCase() ?? '?'
 
   return (
-    <header className="sticky top-0 z-20 flex items-center justify-between border-b border-base-300 bg-base-100 px-4 py-3">
-      <span className="text-base font-extrabold text-primary">Bid2Have</span>
+    <header className="sticky top-0 z-20 flex items-center justify-between border-b-2 border-base-300 bg-base-100 px-4 py-3">
+      <span className="font-display text-lg text-primary">Bid2Have</span>
       <div className="flex items-center gap-1">
         <button
           type="button"
-          className="btn btn-circle btn-ghost btn-sm text-base"
+          className="btn btn-circle btn-ghost btn-sm"
           onClick={toggleTheme}
           aria-label="Cambiar tema"
         >
-          {theme === 'bid2have-dark' ? '☀️' : '🌙'}
+          <span className="h-4 w-4">{theme === 'bid2have-dark' ? <IconSun /> : <IconMoon />}</span>
         </button>
         {user ? (
           <>

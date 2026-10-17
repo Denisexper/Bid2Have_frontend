@@ -1,6 +1,7 @@
 import { Link, Outlet } from 'react-router-dom'
 import { TopBar } from './TopBar'
 import { BottomNav } from './BottomNav'
+import { IconPlus } from './icons'
 
 export function AppLayout() {
   return (
@@ -12,9 +13,11 @@ export function AppLayout() {
       <Link
         to="/listings/new"
         aria-label="Publicar"
-        className="btn btn-circle btn-primary fixed right-4 bottom-20 shadow-lg md:right-8"
+        className="btn btn-circle btn-primary fixed right-4 bottom-20 md:right-8"
       >
-        <span className="text-xl">＋</span>
+        <span className="h-5 w-5">
+          <IconPlus />
+        </span>
       </Link>
       <BottomNav />
     </div>
