@@ -17,9 +17,9 @@ export function LoginPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-base-200">
-      <div className="card w-full max-w-sm bg-base-100 shadow-xl">
+      <div className="card w-full max-w-sm border-2 border-base-300 bg-base-100">
         <div className="card-body items-center text-center">
-          <h1 className="card-title text-2xl">Bid2Have</h1>
+          <h1 className="font-display text-3xl">Bid2Have</h1>
           <p className="text-base-content/70">Iniciá sesión para continuar</p>
           {showExpiredNotice && (
             <p className="mt-2 text-sm text-warning">Tu sesión expiró. Volvé a iniciar sesión.</p>

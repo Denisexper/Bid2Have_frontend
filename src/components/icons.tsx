@@ -1,6 +1,10 @@
+import type { ReactElement } from 'react'
+
 interface IconProps {
   className?: string
 }
+
+export type IconComponent = (props: IconProps) => ReactElement
 
 const base = 'h-full w-full'
 
@@ -52,6 +56,15 @@ export function IconProfile({ className }: IconProps) {
   )
 }
 
+export function IconBell({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className ?? base}>
+      <path strokeLinejoin="round" d="M6 10.5a6 6 0 1 1 12 0c0 3 1 4.8 2 6H4c1-1.2 2-3 2-6Z" />
+      <path strokeLinecap="round" d="M10 19.5a2 2 0 0 0 4 0" />
+    </svg>
+  )
+}
+
 export function IconPlus({ className }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className={className ?? base}>
@@ -93,6 +106,42 @@ export function IconSearch({ className }: IconProps) {
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className ?? base}>
       <circle cx="11" cy="11" r="7" />
       <line x1="21" y1="21" x2="16.65" y2="16.65" />
+    </svg>
+  )
+}
+
+export function IconOffer({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className ?? base}>
+      <path strokeLinejoin="round" d="M20.5 12.7 12.9 20.3a1.5 1.5 0 0 1-2.1 0l-7-7a1.5 1.5 0 0 1 0-2.1L11.3 3.5h7a1.5 1.5 0 0 1 1.5 1.5v7.7Z" />
+      <circle cx="16" cy="8" r="1.4" />
+    </svg>
+  )
+}
+
+export function IconCheckCircle({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className ?? base}>
+      <circle cx="12" cy="12" r="9" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M8.2 12.3l2.5 2.5 5-5.3" />
+    </svg>
+  )
+}
+
+export function IconXCircle({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className ?? base}>
+      <circle cx="12" cy="12" r="9" />
+      <path strokeLinecap="round" d="M9 9l6 6M15 9l-6 6" />
+    </svg>
+  )
+}
+
+export function IconRefresh({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className ?? base}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 12a7.5 7.5 0 0 1 12.8-5.3L19 8.3M19 8.3V4.5M19 8.3h-3.8" />
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12a7.5 7.5 0 0 1-12.8 5.3L5 15.7M5 15.7v3.8M5 15.7h3.8" />
     </svg>
   )
 }

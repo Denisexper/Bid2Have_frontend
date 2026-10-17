@@ -3,6 +3,7 @@ import { useMarkAllNotificationsRead, useMarkNotificationRead, useNotifications 
 import { notificationIcons, notificationLabels, notificationLink } from './presentation'
 import type { Notification } from './types'
 import { formatRelativeTime } from '../listings/format'
+import { IconBell } from '../components/icons'
 
 export function NotificationsBell() {
   const { data } = useNotifications()
@@ -14,13 +15,15 @@ export function NotificationsBell() {
 
   return (
     <div className="dropdown dropdown-end">
-      <div tabIndex={0} role="button" className="indicator btn btn-circle btn-ghost btn-sm text-base">
-        🔔
+      <div tabIndex={0} role="button" className="indicator btn btn-circle btn-ghost btn-sm">
+        <span className="h-4 w-4">
+          <IconBell />
+        </span>
         {unreadIds.length > 0 && (
           <span className="indicator-item badge badge-primary badge-xs">{unreadIds.length}</span>
         )}
       </div>
-      <div tabIndex={0} className="dropdown-content z-30 mt-2 w-80 rounded-box bg-base-100 p-2 shadow-lg">
+      <div tabIndex={0} className="dropdown-content z-30 mt-2 w-80 rounded-box border-2 border-base-300 bg-base-100 p-2 shadow-lg">
         <div className="flex items-center justify-between px-2 py-1">
           <span className="text-xs font-bold text-base-content/60">Notificaciones</span>
           {unreadIds.length > 0 && (
@@ -56,9 +59,12 @@ export function NotificationsBell() {
 
 function NotificationRow({ notification, onRead }: { notification: Notification; onRead: () => void }) {
   const link = notificationLink(notification)
+  const Icon = notificationIcons[notification.type]
   const content = (
     <div className={`flex gap-2 ${notification.read ? 'opacity-60' : ''}`}>
-      <span className="text-base">{notificationIcons[notification.type]}</span>
+      <span className="h-4 w-4 shrink-0 text-base-content/70">
+        <Icon />
+      </span>
       <div className="min-w-0 flex-1">
         <p className="truncate">{notificationLabels[notification.type]}</p>
         <span className="text-[10px] text-base-content/50">{formatRelativeTime(notification.createdAt)}</span>
