@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useCategories } from '../categories/api'
 import { useListings } from '../listings/api'
 import { ListingCard } from '../listings/ListingCard'
+import { IconFeed, IconPin, IconSearch } from '../components/icons'
 
 type GeoStatus = 'idle' | 'loading' | 'error'
 
@@ -49,14 +50,19 @@ export function HomePage() {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-col gap-2 rounded-2xl bg-base-100 p-3 shadow-sm">
-        <input
-          type="text"
-          className="input input-bordered input-sm"
-          placeholder="Buscar por título..."
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+      <div className="flex flex-col gap-2 border-2 border-base-300 bg-base-100 p-3">
+        <label className="input input-bordered input-sm flex items-center gap-2">
+          <span className="h-4 w-4 text-base-content/40">
+            <IconSearch />
+          </span>
+          <input
+            type="text"
+            className="grow"
+            placeholder="Buscar por título..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </label>
 
         <div className="flex flex-wrap items-center gap-2">
           <select
@@ -74,10 +80,13 @@ export function HomePage() {
 
           <button
             type="button"
-            className={`btn btn-sm ${nearbyEnabled ? 'btn-primary' : 'btn-ghost'}`}
+            className={`btn btn-sm gap-1.5 ${nearbyEnabled ? 'btn-primary' : 'btn-ghost'}`}
             onClick={() => (nearbyEnabled ? disableNearby() : enableNearby())}
           >
-            📍 Cerca mío
+            <span className="h-4 w-4">
+              <IconPin />
+            </span>
+            Cerca mío
           </button>
 
           {nearbyEnabled && (
@@ -103,7 +112,7 @@ export function HomePage() {
       )}
 
       {nearbyEnabled && geoStatus === 'error' && (
-        <div className="flex items-center justify-between rounded-2xl bg-base-100 p-3 text-sm shadow-sm">
+        <div className="flex items-center justify-between border-2 border-base-300 bg-base-100 p-3 text-sm">
           <span className="text-error">No pudimos obtener tu ubicación.</span>
           <button type="button" className="btn btn-xs" onClick={enableNearby}>
             Reintentar
@@ -127,7 +136,9 @@ export function HomePage() {
 
           {!isLoading && !isError && listings.length === 0 && (
             <div className="flex flex-col items-center gap-2 py-16 text-center">
-              <span className="text-4xl">📭</span>
+              <span className="h-10 w-10 text-base-content/25">
+                <IconFeed />
+              </span>
               <h2 className="font-bold">
                 {hasFilters
                   ? 'No encontramos publicaciones con esos filtros'
