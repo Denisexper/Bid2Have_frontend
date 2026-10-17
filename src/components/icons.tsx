@@ -59,3 +59,22 @@ export function IconPlus({ className }: IconProps) {
     </svg>
   )
 }
+
+export function IconImage({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className ?? base}>
+      <rect x="3" y="4.5" width="18" height="15" />
+      <circle cx="8.5" cy="9.5" r="1.6" />
+      <path strokeLinejoin="round" d="M3 16l5-4.5 4 3 3.5-4L21 15" />
+    </svg>
+  )
+}
+
+export function IconClock({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className={className ?? base}>
+      <circle cx="12" cy="12" r="9" />
+      <path strokeLinecap="round" d="M12 7v5l3.2 2.2" />
+    </svg>
+  )
+}
