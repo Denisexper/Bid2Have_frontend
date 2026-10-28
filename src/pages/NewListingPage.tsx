@@ -86,12 +86,12 @@ export function NewListingPage() {
   }
 
   return (
-    <div className="mx-auto max-w-lg">
-      <h1 className="mb-4 text-lg font-bold">Publicar</h1>
+    <div className="mx-auto flex max-w-lg flex-col gap-3">
+      <h1 className="text-lg font-bold">Publicar</h1>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <label className="form-control">
-          <span className="label-text mb-1">Título</span>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3 border-2 border-base-300 bg-base-100 p-4">
+        <label className="flex flex-col gap-1">
+          <span className="text-sm font-semibold text-base-content/70">Título</span>
           <input
             type="text"
             className="input input-bordered"
@@ -102,8 +102,8 @@ export function NewListingPage() {
           />
         </label>
 
-        <label className="form-control">
-          <span className="label-text mb-1">Descripción</span>
+        <label className="flex flex-col gap-1">
+          <span className="text-sm font-semibold text-base-content/70">Descripción</span>
           <textarea
             className="textarea textarea-bordered"
             value={description}
@@ -113,8 +113,8 @@ export function NewListingPage() {
           />
         </label>
 
-        <label className="form-control">
-          <span className="label-text mb-1">Categoría</span>
+        <label className="flex flex-col gap-1">
+          <span className="text-sm font-semibold text-base-content/70">Categoría</span>
           <select
             className="select select-bordered"
             value={categoryId}
@@ -134,8 +134,8 @@ export function NewListingPage() {
         </label>
 
         <div className="flex gap-3">
-          <label className="form-control flex-1">
-            <span className="label-text mb-1">Condición</span>
+          <label className="flex flex-1 flex-col gap-1">
+            <span className="text-sm font-semibold text-base-content/70">Condición</span>
             <select
               className="select select-bordered"
               value={condition}
@@ -146,8 +146,8 @@ export function NewListingPage() {
             </select>
           </label>
 
-          <label className="form-control flex-1">
-            <span className="label-text mb-1">Modo de venta</span>
+          <label className="flex flex-1 flex-col gap-1">
+            <span className="text-sm font-semibold text-base-content/70">Modo de venta</span>
             <select
               className="select select-bordered"
               value={saleMode}
@@ -160,8 +160,8 @@ export function NewListingPage() {
         </div>
 
         {saleMode === 'AUCTION' && (
-          <label className="form-control">
-            <span className="label-text mb-1">Cierre de la subasta</span>
+          <label className="flex flex-col gap-1">
+            <span className="text-sm font-semibold text-base-content/70">Cierre de la subasta</span>
             <input
               type="datetime-local"
               className="input input-bordered"
@@ -173,8 +173,8 @@ export function NewListingPage() {
         )}
 
         <div className="flex gap-3">
-          <label className="form-control flex-1">
-            <span className="label-text mb-1">Precio</span>
+          <label className="flex flex-1 flex-col gap-1">
+            <span className="text-sm font-semibold text-base-content/70">Precio</span>
             <input
               type="number"
               className="input input-bordered"
@@ -186,8 +186,8 @@ export function NewListingPage() {
             />
           </label>
 
-          <label className="form-control w-28">
-            <span className="label-text mb-1">Moneda</span>
+          <label className="flex w-28 flex-col gap-1">
+            <span className="text-sm font-semibold text-base-content/70">Moneda</span>
             <input
               type="text"
               className="input input-bordered uppercase"
@@ -199,8 +199,8 @@ export function NewListingPage() {
           </label>
         </div>
 
-        <label className="form-control">
-          <span className="label-text mb-1">Fotos (una URL por línea, opcional)</span>
+        <label className="flex flex-col gap-1">
+          <span className="text-sm font-semibold text-base-content/70">Fotos (una URL por línea, opcional)</span>
           <textarea
             className="textarea textarea-bordered"
             value={photosText}
@@ -210,7 +210,7 @@ export function NewListingPage() {
           />
         </label>
 
-        <div className="border border-base-300 bg-base-100 p-3 text-sm">
+        <div className="border border-base-300 bg-base-200 p-3 text-sm">
           {geoStatus === 'loading' && (
             <span className="inline-flex items-center gap-1.5 text-base-content/60">
               <span className="h-3.5 w-3.5">
