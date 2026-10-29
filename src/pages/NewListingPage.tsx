@@ -41,6 +41,13 @@ export function NewListingPage() {
 
   const categories = categoriesData?.categories ?? []
 
+  const checklist = [
+    { label: 'Título', done: title.trim().length > 0 },
+    { label: 'Descripción', done: description.trim().length > 0 },
+    { label: 'Categoría', done: categoryId.length > 0 },
+    { label: 'Precio', done: Number(price) > 0 },
+  ]
+
   useEffect(() => {
     requestLocation()
   }, [])
@@ -263,6 +270,15 @@ export function NewListingPage() {
         <aside className="flex flex-col gap-2 border-t-2 border-base-300 bg-base-200 p-4 lg:border-t-0">
           <h2 className="text-sm font-semibold text-base-content/70">Resumen de publicación</h2>
           <span className="font-display text-2xl tabular-nums">{safeFormatPrice(price, currency)}</span>
+
+          <div className="flex flex-col gap-1.5 border-t border-base-300 pt-3">
+            {checklist.map((item) => (
+              <div key={item.label} className="flex items-center justify-between text-sm">
+                <span className={item.done ? 'text-base-content' : 'text-base-content/40'}>{item.label}</span>
+                <span className={`h-3 w-3 border-2 border-base-300 ${item.done ? 'bg-base-content' : ''}`} />
+              </div>
+            ))}
+          </div>
         </aside>
       </form>
     </div>
