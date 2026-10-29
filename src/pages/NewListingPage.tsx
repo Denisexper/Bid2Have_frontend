@@ -48,6 +48,10 @@ export function NewListingPage() {
     ...(saleMode === 'AUCTION' ? [{ label: 'Cierre de subasta', done: auctionEndAt.length > 0 }] : []),
   ]
   const canPublish = checklist.every((item) => item.done) && coords !== null
+  const missingLabels = [
+    ...checklist.filter((item) => !item.done).map((item) => item.label),
+    ...(coords === null ? ['Ubicación'] : []),
+  ]
 
   useEffect(() => {
     requestLocation()
@@ -285,6 +289,10 @@ export function NewListingPage() {
               )}
             </div>
           </div>
+
+          {missingLabels.length > 0 && (
+            <p className="text-xs text-base-content/40">Falta: {missingLabels.join(', ')}</p>
+          )}
 
           {formError && <p className="text-sm text-error">{formError}</p>}
 
