@@ -47,6 +47,7 @@ export function NewListingPage() {
     { label: 'Precio', done: Number(price) > 0 },
     ...(saleMode === 'AUCTION' ? [{ label: 'Cierre de subasta', done: auctionEndAt.length > 0 }] : []),
   ]
+  const canPublish = checklist.every((item) => item.done) && coords !== null
 
   useEffect(() => {
     requestLocation()
@@ -233,11 +234,6 @@ export function NewListingPage() {
           />
         </label>
 
-        {formError && <p className="text-sm text-error">{formError}</p>}
-
-        <button type="submit" className="btn btn-primary" disabled={createListing.isPending || !coords}>
-          {createListing.isPending ? <span className="loading loading-spinner loading-sm" /> : 'Publicar'}
-        </button>
         </div>
 
         <aside className="flex flex-col gap-2 border-t-2 border-base-300 bg-base-200 p-4 lg:border-t-0">
@@ -273,6 +269,12 @@ export function NewListingPage() {
               )}
             </div>
           </div>
+
+          {formError && <p className="text-sm text-error">{formError}</p>}
+
+          <button type="submit" className="btn btn-primary mt-auto" disabled={createListing.isPending || !canPublish}>
+            {createListing.isPending ? <span className="loading loading-spinner loading-sm" /> : 'Publicar'}
+          </button>
         </aside>
       </form>
     </div>
