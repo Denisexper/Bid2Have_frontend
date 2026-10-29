@@ -157,30 +157,46 @@ export function NewListingPage() {
           </select>
         </label>
 
-        <div className="flex gap-3">
-          <label className="flex flex-1 flex-col gap-1">
+        <div className="flex flex-col gap-3 sm:flex-row">
+          <div className="flex flex-1 flex-col gap-1">
             <span className="text-sm font-semibold text-base-content/70">Condición</span>
-            <select
-              className="select select-bordered"
-              value={condition}
-              onChange={(e) => setCondition(e.target.value as ListingCondition)}
-            >
-              <option value="NEW">Nuevo</option>
-              <option value="USED">Usado</option>
-            </select>
-          </label>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                className={`btn flex-1 ${condition === 'NEW' ? 'btn-primary' : 'btn-ghost'}`}
+                onClick={() => setCondition('NEW')}
+              >
+                Nuevo
+              </button>
+              <button
+                type="button"
+                className={`btn flex-1 ${condition === 'USED' ? 'btn-primary' : 'btn-ghost'}`}
+                onClick={() => setCondition('USED')}
+              >
+                Usado
+              </button>
+            </div>
+          </div>
 
-          <label className="flex flex-1 flex-col gap-1">
+          <div className="flex flex-1 flex-col gap-1">
             <span className="text-sm font-semibold text-base-content/70">Modo de venta</span>
-            <select
-              className="select select-bordered"
-              value={saleMode}
-              onChange={(e) => setSaleMode(e.target.value as SaleMode)}
-            >
-              <option value="FREE_OFFER">Oferta libre</option>
-              <option value="AUCTION">Subasta</option>
-            </select>
-          </label>
+            <div className="flex gap-2">
+              <button
+                type="button"
+                className={`btn flex-1 ${saleMode === 'FREE_OFFER' ? 'btn-primary' : 'btn-ghost'}`}
+                onClick={() => setSaleMode('FREE_OFFER')}
+              >
+                Oferta libre
+              </button>
+              <button
+                type="button"
+                className={`btn flex-1 ${saleMode === 'AUCTION' ? 'btn-primary' : 'btn-ghost'}`}
+                onClick={() => setSaleMode('AUCTION')}
+              >
+                Subasta
+              </button>
+            </div>
+          </div>
         </div>
 
         {saleMode === 'AUCTION' && (
