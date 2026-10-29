@@ -4,7 +4,6 @@ import { useCategories } from '../categories/api'
 import { useCreateListing } from '../listings/api'
 import type { ListingCondition, SaleMode } from '../listings/types'
 import { ApiError } from '../api/client'
-import { IconPin } from '../components/icons'
 import { formatPrice } from '../listings/format'
 
 function safeFormatPrice(price: string, currency: string): string {
@@ -233,33 +232,6 @@ export function NewListingPage() {
           />
         </label>
 
-        <div className="border border-base-300 bg-base-200 p-3 text-sm">
-          {geoStatus === 'loading' && (
-            <span className="inline-flex items-center gap-1.5 text-base-content/60">
-              <span className="h-3.5 w-3.5">
-                <IconPin />
-              </span>
-              Obteniendo tu ubicación...
-            </span>
-          )}
-          {geoStatus === 'success' && (
-            <span className="inline-flex items-center gap-1.5 text-success">
-              <span className="h-3.5 w-3.5">
-                <IconPin />
-              </span>
-              Ubicación lista
-            </span>
-          )}
-          {geoStatus === 'error' && (
-            <div className="flex items-center justify-between">
-              <span className="text-error">No pudimos obtener tu ubicación.</span>
-              <button type="button" className="btn btn-xs" onClick={requestLocation}>
-                Reintentar
-              </button>
-            </div>
-          )}
-        </div>
-
         {formError && <p className="text-sm text-error">{formError}</p>}
 
         <button type="submit" className="btn btn-primary" disabled={createListing.isPending || !coords}>
@@ -278,6 +250,27 @@ export function NewListingPage() {
                 <span className={`h-3 w-3 border-2 border-base-300 ${item.done ? 'bg-base-content' : ''}`} />
               </div>
             ))}
+
+            <div className="flex items-center justify-between text-sm">
+              <span
+                className={
+                  coords
+                    ? 'text-base-content'
+                    : geoStatus === 'error'
+                      ? 'text-error'
+                      : 'text-base-content/40'
+                }
+              >
+                Ubicación
+              </span>
+              {geoStatus === 'loading' && <span className="loading loading-spinner loading-xs" />}
+              {geoStatus === 'success' && <span className="h-3 w-3 border-2 border-base-300 bg-base-content" />}
+              {geoStatus === 'error' && (
+                <button type="button" className="btn btn-xs" onClick={requestLocation}>
+                  Reintentar
+                </button>
+              )}
+            </div>
           </div>
         </aside>
       </form>
