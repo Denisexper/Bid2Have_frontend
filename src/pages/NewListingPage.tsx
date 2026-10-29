@@ -117,143 +117,148 @@ export function NewListingPage() {
         onSubmit={handleSubmit}
         className="grid border-2 border-base-300 bg-base-100 lg:grid-cols-[1fr_280px]"
       >
-        <div className="flex flex-col gap-3 p-4 lg:border-r-2 lg:border-base-300">
-        <label className="flex flex-col gap-1">
-          <span className="text-sm font-semibold text-base-content/70">Título</span>
-          <input
-            type="text"
-            className="input input-bordered"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            required
-            maxLength={120}
-          />
-        </label>
+        <div className="flex flex-col gap-4 p-4 lg:border-r-2 lg:border-base-300">
+          <div className="flex flex-col gap-3">
+            <label className="flex flex-col gap-1">
+              <span className="text-sm font-semibold text-base-content/70">Título</span>
+              <input
+                type="text"
+                className="input input-bordered"
+                value={title}
+                onChange={(e) => setTitle(e.target.value)}
+                required
+                maxLength={120}
+              />
+            </label>
 
-        <label className="flex flex-col gap-1">
-          <span className="text-sm font-semibold text-base-content/70">Descripción</span>
-          <textarea
-            className="textarea textarea-bordered"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-            rows={4}
-          />
-        </label>
+            <label className="flex flex-col gap-1">
+              <span className="text-sm font-semibold text-base-content/70">Descripción</span>
+              <textarea
+                className="textarea textarea-bordered"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
+                required
+                rows={4}
+              />
+            </label>
+          </div>
 
-        <label className="flex flex-col gap-1">
-          <span className="text-sm font-semibold text-base-content/70">Categoría</span>
-          <select
-            className="select select-bordered"
-            value={categoryId}
-            onChange={(e) => setCategoryId(e.target.value)}
-            required
-            disabled={isLoadingCategories}
-          >
-            <option value="" disabled>
-              {isLoadingCategories ? 'Cargando...' : 'Elegí una categoría'}
-            </option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.name}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <div className="flex flex-col gap-3 sm:flex-row">
-          <div className="flex flex-1 flex-col gap-1">
-            <span className="text-sm font-semibold text-base-content/70">Condición</span>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                className={`btn flex-1 ${condition === 'NEW' ? 'btn-primary' : 'btn-ghost'}`}
-                onClick={() => setCondition('NEW')}
+          <div className="flex flex-col gap-3 border-t border-base-300 pt-4">
+            <label className="flex flex-col gap-1">
+              <span className="text-sm font-semibold text-base-content/70">Categoría</span>
+              <select
+                className="select select-bordered"
+                value={categoryId}
+                onChange={(e) => setCategoryId(e.target.value)}
+                required
+                disabled={isLoadingCategories}
               >
-                Nuevo
-              </button>
-              <button
-                type="button"
-                className={`btn flex-1 ${condition === 'USED' ? 'btn-primary' : 'btn-ghost'}`}
-                onClick={() => setCondition('USED')}
-              >
-                Usado
-              </button>
+                <option value="" disabled>
+                  {isLoadingCategories ? 'Cargando...' : 'Elegí una categoría'}
+                </option>
+                {categories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))}
+              </select>
+            </label>
+
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <div className="flex flex-1 flex-col gap-1">
+                <span className="text-sm font-semibold text-base-content/70">Condición</span>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    className={`btn flex-1 ${condition === 'NEW' ? 'btn-primary' : 'btn-ghost'}`}
+                    onClick={() => setCondition('NEW')}
+                  >
+                    Nuevo
+                  </button>
+                  <button
+                    type="button"
+                    className={`btn flex-1 ${condition === 'USED' ? 'btn-primary' : 'btn-ghost'}`}
+                    onClick={() => setCondition('USED')}
+                  >
+                    Usado
+                  </button>
+                </div>
+              </div>
+
+              <div className="flex flex-1 flex-col gap-1">
+                <span className="text-sm font-semibold text-base-content/70">Modo de venta</span>
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    className={`btn flex-1 ${saleMode === 'FREE_OFFER' ? 'btn-primary' : 'btn-ghost'}`}
+                    onClick={() => setSaleMode('FREE_OFFER')}
+                  >
+                    Oferta libre
+                  </button>
+                  <button
+                    type="button"
+                    className={`btn flex-1 ${saleMode === 'AUCTION' ? 'btn-primary' : 'btn-ghost'}`}
+                    onClick={() => setSaleMode('AUCTION')}
+                  >
+                    Subasta
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="flex flex-1 flex-col gap-1">
-            <span className="text-sm font-semibold text-base-content/70">Modo de venta</span>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                className={`btn flex-1 ${saleMode === 'FREE_OFFER' ? 'btn-primary' : 'btn-ghost'}`}
-                onClick={() => setSaleMode('FREE_OFFER')}
-              >
-                Oferta libre
-              </button>
-              <button
-                type="button"
-                className={`btn flex-1 ${saleMode === 'AUCTION' ? 'btn-primary' : 'btn-ghost'}`}
-                onClick={() => setSaleMode('AUCTION')}
-              >
-                Subasta
-              </button>
+          <div className="flex flex-col gap-3 border-t border-base-300 pt-4">
+            <div className="flex gap-3">
+              <label className="flex flex-1 flex-col gap-1">
+                <span className="text-sm font-semibold text-base-content/70">Precio</span>
+                <input
+                  type="number"
+                  className="input input-bordered"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  required
+                  min="0"
+                  step="0.01"
+                />
+              </label>
+
+              <label className="flex w-28 flex-col gap-1">
+                <span className="text-sm font-semibold text-base-content/70">Moneda</span>
+                <input
+                  type="text"
+                  className="input input-bordered uppercase"
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value.toUpperCase())}
+                  maxLength={3}
+                  required
+                />
+              </label>
             </div>
+
+            {saleMode === 'AUCTION' && (
+              <label className="flex flex-col gap-1">
+                <span className="text-sm font-semibold text-base-content/70">Cierre de la subasta</span>
+                <input
+                  type="datetime-local"
+                  className="input input-bordered"
+                  value={auctionEndAt}
+                  onChange={(e) => setAuctionEndAt(e.target.value)}
+                  required
+                />
+              </label>
+            )}
           </div>
-        </div>
 
-        {saleMode === 'AUCTION' && (
-          <label className="flex flex-col gap-1">
-            <span className="text-sm font-semibold text-base-content/70">Cierre de la subasta</span>
-            <input
-              type="datetime-local"
-              className="input input-bordered"
-              value={auctionEndAt}
-              onChange={(e) => setAuctionEndAt(e.target.value)}
-              required
+          <label className="flex flex-col gap-1 border-t border-base-300 pt-4">
+            <span className="text-sm font-semibold text-base-content/70">Fotos (una URL por línea, opcional)</span>
+            <textarea
+              className="textarea textarea-bordered"
+              value={photosText}
+              onChange={(e) => setPhotosText(e.target.value)}
+              rows={3}
+              placeholder="https://..."
             />
           </label>
-        )}
-
-        <div className="flex gap-3">
-          <label className="flex flex-1 flex-col gap-1">
-            <span className="text-sm font-semibold text-base-content/70">Precio</span>
-            <input
-              type="number"
-              className="input input-bordered"
-              value={price}
-              onChange={(e) => setPrice(e.target.value)}
-              required
-              min="0"
-              step="0.01"
-            />
-          </label>
-
-          <label className="flex w-28 flex-col gap-1">
-            <span className="text-sm font-semibold text-base-content/70">Moneda</span>
-            <input
-              type="text"
-              className="input input-bordered uppercase"
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value.toUpperCase())}
-              maxLength={3}
-              required
-            />
-          </label>
-        </div>
-
-        <label className="flex flex-col gap-1">
-          <span className="text-sm font-semibold text-base-content/70">Fotos (una URL por línea, opcional)</span>
-          <textarea
-            className="textarea textarea-bordered"
-            value={photosText}
-            onChange={(e) => setPhotosText(e.target.value)}
-            rows={3}
-            placeholder="https://..."
-          />
-        </label>
-
         </div>
 
         <aside className="flex flex-col gap-2 border-t-2 border-base-300 bg-base-200 p-4 lg:border-t-0">
