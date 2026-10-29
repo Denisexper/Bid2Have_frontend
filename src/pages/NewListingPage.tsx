@@ -5,6 +5,18 @@ import { useCreateListing } from '../listings/api'
 import type { ListingCondition, SaleMode } from '../listings/types'
 import { ApiError } from '../api/client'
 import { IconPin } from '../components/icons'
+import { formatPrice } from '../listings/format'
+
+function safeFormatPrice(price: string, currency: string): string {
+  if (!price || currency.length !== 3) {
+    return '—'
+  }
+  try {
+    return formatPrice(price, currency)
+  } catch {
+    return '—'
+  }
+}
 
 type GeoStatus = 'loading' | 'success' | 'error'
 
@@ -86,10 +98,14 @@ export function NewListingPage() {
   }
 
   return (
-    <div className="mx-auto flex max-w-lg flex-col gap-3">
+    <div className="mx-auto flex max-w-3xl flex-col gap-3">
       <h1 className="text-lg font-bold">Publicar</h1>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3 border-2 border-base-300 bg-base-100 p-4">
+      <form
+        onSubmit={handleSubmit}
+        className="grid border-2 border-base-300 bg-base-100 lg:grid-cols-[1fr_280px]"
+      >
+        <div className="flex flex-col gap-3 p-4 lg:border-r-2 lg:border-base-300">
         <label className="flex flex-col gap-1">
           <span className="text-sm font-semibold text-base-content/70">Título</span>
           <input
@@ -242,6 +258,12 @@ export function NewListingPage() {
         <button type="submit" className="btn btn-primary" disabled={createListing.isPending || !coords}>
           {createListing.isPending ? <span className="loading loading-spinner loading-sm" /> : 'Publicar'}
         </button>
+        </div>
+
+        <aside className="flex flex-col gap-2 border-t-2 border-base-300 bg-base-200 p-4 lg:border-t-0">
+          <h2 className="text-sm font-semibold text-base-content/70">Resumen de publicación</h2>
+          <span className="font-display text-2xl tabular-nums">{safeFormatPrice(price, currency)}</span>
+        </aside>
       </form>
     </div>
   )
