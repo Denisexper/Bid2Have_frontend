@@ -45,6 +45,7 @@ export function NewListingPage() {
     { label: 'Descripción', done: description.trim().length > 0 },
     { label: 'Categoría', done: categoryId.length > 0 },
     { label: 'Precio', done: Number(price) > 0 },
+    ...(saleMode === 'AUCTION' ? [{ label: 'Cierre de subasta', done: auctionEndAt.length > 0 }] : []),
   ]
 
   useEffect(() => {
