@@ -1,5 +1,7 @@
 import { useState } from 'react'
+import { Link } from 'react-router-dom'
 import { ApiError } from '../api/client'
+import { useChats } from '../chat/api'
 import { formatPrice, formatRelativeTime } from '../listings/format'
 import { useAcceptOffer, useCounterOffer, useListingOffers, useRejectOffer } from './api'
 import { offerStatusLabels } from './statusLabels'
@@ -48,6 +50,8 @@ function OfferRow({ offer, listingId, currency }: { offer: Offer; listingId: str
   const accept = useAcceptOffer(listingId)
   const reject = useRejectOffer(listingId)
   const counter = useCounterOffer(listingId)
+  const { data: chatsData } = useChats()
+  const chat = chatsData?.chats.find((c) => c.offerId === offer.id)
 
   const error = accept.error ?? reject.error ?? counter.error
   const isPending = accept.isPending || reject.isPending || counter.isPending
@@ -124,7 +128,14 @@ function OfferRow({ offer, listingId, currency }: { offer: Offer; listingId: str
       )}
 
       {offer.status === 'ACCEPTED' && (
-        <div className="mt-2">
+        <div className="mt-2 flex flex-wrap items-center gap-2">
+          {chat ? (
+            <Link to={`/chats/${chat.id}`} className="btn btn-primary btn-xs">
+              Chatear con el comprador
+            </Link>
+          ) : (
+            <span className="text-xs text-base-content/50">El chat se está creando, revisá Chats en un momento.</span>
+          )}
           <RateOfferButton offerId={offer.id} label="Calificar al comprador" />
         </div>
       )}
