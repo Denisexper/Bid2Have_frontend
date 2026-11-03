@@ -6,7 +6,7 @@ import { formatDateDivider, formatMessageTime, isSameCalendarDay } from '../chat
 import { getChatSocket } from '../chat/socket'
 import type { Message } from '../chat/types'
 import { useListing } from '../listings/api'
-import { IconArrowLeft, IconChat, IconProfile, IconSend } from '../components/icons'
+import { IconArrowLeft, IconChat, IconSend } from '../components/icons'
 
 const FIVE_MINUTES_MS = 5 * 60 * 1000
 
@@ -85,7 +85,8 @@ function ChatThread({ chatId }: { chatId: string }) {
 
   const chat = chatData?.chat
   const listing = listingData?.listing
-  const counterpartRole = chat && user ? (user.id === chat.sellerId ? 'Comprador' : 'Vendedor') : null
+  const counterpart = chat && user ? (user.id === chat.sellerId ? chat.buyer : chat.seller) : null
+  const initial = counterpart?.name?.charAt(0).toUpperCase() ?? '?'
 
   return (
     <div className="flex h-[calc(100vh-9.5rem)] flex-col border-2 border-base-300 bg-base-100">
@@ -100,15 +101,17 @@ function ChatThread({ chatId }: { chatId: string }) {
           </span>
         </Link>
 
-        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral text-neutral-content">
-          <span className="h-5 w-5">
-            <IconProfile />
-          </span>
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-content">
+          {initial}
         </div>
 
         <Link to={listing ? `/listings/${listing.id}` : '#'} className="min-w-0 flex-1">
-          <h1 className="truncate text-sm font-bold">{counterpartRole ?? 'Chat'}</h1>
-          <p className="truncate text-xs text-base-content/50">{listing?.title ?? 'Publicación'}</p>
+          <h1 className="truncate text-sm font-bold">{counterpart?.name ?? 'Chat'}</h1>
+          <p className="truncate text-xs text-base-content/50">
+            {counterpart?.email}
+            {counterpart && listing ? ' · ' : ''}
+            {listing?.title}
+          </p>
         </Link>
       </div>
 
