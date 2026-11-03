@@ -1,11 +1,14 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
-import { useParams } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { useAuth } from '../auth/AuthContext'
 import { useChat, useChatMessages } from '../chat/api'
-import { formatMessageTime } from '../chat/format'
+import { formatDateDivider, formatMessageTime, isSameCalendarDay } from '../chat/format'
 import { getChatSocket } from '../chat/socket'
 import type { Message } from '../chat/types'
 import { useListing } from '../listings/api'
+import { IconArrowLeft, IconChat, IconProfile, IconSend } from '../components/icons'
+
+const FIVE_MINUTES_MS = 5 * 60 * 1000
 
 export function ChatDetailPage() {
   const { id: chatId } = useParams<{ id: string }>()
@@ -80,43 +83,123 @@ function ChatThread({ chatId }: { chatId: string }) {
     )
   }
 
-  return (
-    <div className="flex h-[calc(100vh-9.5rem)] flex-col">
-      {listingData && <h1 className="mb-2 truncate text-sm font-bold">{listingData.listing.title}</h1>}
+  const chat = chatData?.chat
+  const listing = listingData?.listing
+  const counterpartRole = chat && user ? (user.id === chat.sellerId ? 'Comprador' : 'Vendedor') : null
 
-      <div className="flex-1 overflow-y-auto border-2 border-base-300 bg-base-100 p-3">
-        <div className="flex flex-col gap-2">
-          {messages.map((message) => {
-            const isMine = message.senderId === user?.id
-            return (
-              <div key={message.id} className={`flex ${isMine ? 'justify-end' : 'justify-start'}`}>
-                <div
-                  className={`max-w-[75%] rounded-2xl px-3 py-2 text-sm ${
-                    isMine ? 'bg-primary text-primary-content' : 'bg-base-200'
-                  }`}
-                >
-                  <p className="whitespace-pre-wrap break-words">{message.content}</p>
-                  <span className="mt-0.5 block text-right text-[10px] opacity-60">
-                    {formatMessageTime(message.createdAt)}
-                  </span>
-                </div>
-              </div>
-            )
-          })}
-          <div ref={bottomRef} />
+  return (
+    <div className="flex h-[calc(100vh-9.5rem)] flex-col border-2 border-base-300 bg-base-100">
+      <div className="flex shrink-0 items-center gap-3 border-b-2 border-base-300 bg-base-100 p-2.5">
+        <Link
+          to="/chats"
+          aria-label="Volver a chats"
+          className="btn btn-circle btn-ghost btn-sm shrink-0"
+        >
+          <span className="h-5 w-5">
+            <IconArrowLeft />
+          </span>
+        </Link>
+
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-neutral text-neutral-content">
+          <span className="h-5 w-5">
+            <IconProfile />
+          </span>
         </div>
+
+        <Link to={listing ? `/listings/${listing.id}` : '#'} className="min-w-0 flex-1">
+          <h1 className="truncate text-sm font-bold">{counterpartRole ?? 'Chat'}</h1>
+          <p className="truncate text-xs text-base-content/50">{listing?.title ?? 'Publicación'}</p>
+        </Link>
       </div>
 
-      <form onSubmit={handleSend} className="mt-2 flex gap-2">
+      <div className="flex-1 overflow-y-auto bg-base-200 p-3">
+        {messages.length === 0 ? (
+          <div className="flex h-full flex-col items-center justify-center gap-2 text-center">
+            <span className="h-9 w-9 text-base-content/25">
+              <IconChat />
+            </span>
+            <p className="max-w-[220px] text-sm text-base-content/50">
+              Escribile para coordinar dónde encontrarse y cerrar la compra.
+            </p>
+          </div>
+        ) : (
+          <div className="flex flex-col">
+            {messages.map((message, index) => {
+              const previous = messages[index - 1]
+              const next = messages[index + 1]
+              const isMine = message.senderId === user?.id
+
+              const sameSenderAsPrevious = previous?.senderId === message.senderId
+              const closeToPrevious =
+                sameSenderAsPrevious &&
+                new Date(message.createdAt).getTime() - new Date(previous.createdAt).getTime() < FIVE_MINUTES_MS &&
+                isSameCalendarDay(previous.createdAt, message.createdAt)
+
+              const sameSenderAsNext = next?.senderId === message.senderId
+              const closeToNext =
+                sameSenderAsNext &&
+                new Date(next.createdAt).getTime() - new Date(message.createdAt).getTime() < FIVE_MINUTES_MS &&
+                isSameCalendarDay(message.createdAt, next.createdAt)
+
+              const isFirstInGroup = !closeToPrevious
+              const isLastInGroup = !closeToNext
+              const showDateDivider = !previous || !isSameCalendarDay(previous.createdAt, message.createdAt)
+
+              const bubbleCorners = isMine
+                ? `rounded-2xl ${!isFirstInGroup ? 'rounded-tr-md' : ''} ${!isLastInGroup ? 'rounded-br-md' : ''}`
+                : `rounded-2xl ${!isFirstInGroup ? 'rounded-tl-md' : ''} ${!isLastInGroup ? 'rounded-bl-md' : ''}`
+
+              return (
+                <div key={message.id}>
+                  {showDateDivider && (
+                    <div className="my-3 flex justify-center">
+                      <span className="rounded-full bg-base-300/70 px-2.5 py-0.5 text-[11px] text-base-content/60">
+                        {formatDateDivider(message.createdAt)}
+                      </span>
+                    </div>
+                  )}
+
+                  <div className={`flex ${isMine ? 'justify-end' : 'justify-start'} ${isFirstInGroup ? 'mt-2' : 'mt-0.5'}`}>
+                    <div
+                      className={`max-w-[75%] px-3 py-2 text-sm ${bubbleCorners} ${
+                        isMine ? 'bg-neutral text-neutral-content' : 'border border-base-300 bg-base-100'
+                      }`}
+                    >
+                      <p className="whitespace-pre-wrap break-words">{message.content}</p>
+                      <span
+                        className={`mt-0.5 block text-right text-[10px] ${
+                          isMine ? 'text-neutral-content/60' : 'text-base-content/40'
+                        }`}
+                      >
+                        {formatMessageTime(message.createdAt)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )
+            })}
+            <div ref={bottomRef} />
+          </div>
+        )}
+      </div>
+
+      <form onSubmit={handleSend} className="flex shrink-0 items-center gap-2 border-t-2 border-base-300 bg-base-100 p-2.5">
         <input
           type="text"
-          className="input input-bordered flex-1"
+          className="input input-bordered flex-1 rounded-full"
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
           placeholder="Escribí un mensaje..."
         />
-        <button type="submit" className="btn btn-primary" disabled={!draft.trim()}>
-          Enviar
+        <button
+          type="submit"
+          aria-label="Enviar mensaje"
+          className="btn btn-circle btn-neutral shrink-0"
+          disabled={!draft.trim()}
+        >
+          <span className="h-5 w-5">
+            <IconSend />
+          </span>
         </button>
       </form>
     </div>
