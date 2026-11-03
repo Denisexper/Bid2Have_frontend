@@ -1,3 +1,10 @@
+export interface ChatParticipant {
+  id: string
+  name: string
+  email: string
+  avatarUrl: string | null
+}
+
 export interface Chat {
   id: string
   listingId: string
@@ -5,6 +12,11 @@ export interface Chat {
   buyerId: string
   sellerId: string
   createdAt: string
+}
+
+export interface ChatWithParticipants extends Chat {
+  buyer: ChatParticipant
+  seller: ChatParticipant
 }
 
 export interface Message {
