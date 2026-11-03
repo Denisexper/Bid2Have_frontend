@@ -1,13 +1,13 @@
 import { useQuery } from '@tanstack/react-query'
 import { apiFetch } from '../api/client'
-import type { Chat, Message } from './types'
+import type { Chat, ChatWithParticipants, Message } from './types'
 
 interface ChatsResponse {
   chats: Chat[]
 }
 
 interface ChatResponse {
-  chat: Chat
+  chat: ChatWithParticipants
 }
 
 interface MessagesResponse {
