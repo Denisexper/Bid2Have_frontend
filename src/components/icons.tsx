@@ -146,6 +146,22 @@ export function IconRefresh({ className }: IconProps) {
   )
 }
 
+export function IconArrowLeft({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className ?? base}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M19 12H5M11 6l-6 6 6 6" />
+    </svg>
+  )
+}
+
+export function IconSend({ className }: IconProps) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" className={className ?? base}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M4 12.5 20 4l-4.5 16-5-6.5-6.5-1Z" />
+    </svg>
+  )
+}
+
 interface StarProps extends IconProps {
   filled?: boolean
 }
