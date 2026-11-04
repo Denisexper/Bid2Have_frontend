@@ -4,10 +4,18 @@ import { useChats } from '../chat/api'
 import type { Chat } from '../chat/types'
 import { useListing } from '../listings/api'
 import { formatRelativeTime } from '../listings/format'
+import { useNotifications } from '../notifications/api'
 import { IconChat } from '../components/icons'
 
 export function ChatsPage() {
   const { data, isLoading, isError } = useChats()
+  const { data: notifData } = useNotifications()
+
+  const unreadChatIds = new Set(
+    (notifData?.notifications ?? [])
+      .filter((n) => n.type === 'NEW_MESSAGE' && !n.read && n.payload?.chatId)
+      .map((n) => n.payload!.chatId as string),
+  )
 
   if (isLoading) {
     return (
@@ -44,13 +52,13 @@ export function ChatsPage() {
   return (
     <div className="flex flex-col gap-2">
       {chats.map((chat) => (
-        <ChatListItem key={chat.id} chat={chat} />
+        <ChatListItem key={chat.id} chat={chat} hasUnread={unreadChatIds.has(chat.id)} />
       ))}
     </div>
   )
 }
 
-function ChatListItem({ chat }: { chat: Chat }) {
+function ChatListItem({ chat, hasUnread }: { chat: Chat; hasUnread: boolean }) {
   const { user } = useAuth()
   const { data } = useListing(chat.listingId)
 
@@ -62,14 +70,22 @@ function ChatListItem({ chat }: { chat: Chat }) {
       to={`/chats/${chat.id}`}
       className="flex items-center gap-3 border-2 border-base-300 bg-base-100 p-3 active:scale-[0.99]"
     >
-      <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 p-2.5">
+      <div className="relative flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10 p-2.5">
         <IconChat />
+        {hasUnread && (
+          <span className="absolute -top-0.5 -right-0.5 h-2.5 w-2.5 rounded-full bg-primary ring-2 ring-base-100" />
+        )}
       </div>
       <div className="min-w-0 flex-1">
-        <h3 className="truncate text-sm font-bold">{title}</h3>
-        <span className="text-xs text-base-content/50">{role}</span>
+        <h3 className={`truncate text-sm ${hasUnread ? 'font-extrabold' : 'font-bold'}`}>{title}</h3>
+        <span className={`text-xs ${hasUnread ? 'font-semibold text-base-content/80' : 'text-base-content/50'}`}>
+          {role}
+        </span>
       </div>
-      <span className="shrink-0 text-[11px] text-base-content/40">{formatRelativeTime(chat.createdAt)}</span>
+      <div className="flex shrink-0 flex-col items-end gap-1.5">
+        <span className="text-[11px] text-base-content/40">{formatRelativeTime(chat.createdAt)}</span>
+        {hasUnread && <span className="h-2 w-2 rounded-full bg-primary" />}
+      </div>
     </Link>
   )
 }

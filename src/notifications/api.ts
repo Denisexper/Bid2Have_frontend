@@ -12,11 +12,12 @@ interface NotificationResponse {
 
 const UNREAD_POLL_INTERVAL = 20_000
 
-export function useNotifications() {
+export function useNotifications(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: ['notifications'],
     queryFn: () => apiFetch<NotificationsResponse>('/notifications'),
     refetchInterval: UNREAD_POLL_INTERVAL,
+    enabled: options?.enabled ?? true,
   })
 }
 
