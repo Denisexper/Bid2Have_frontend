@@ -152,25 +152,31 @@ function ChatThread({ chatId }: { chatId: string }) {
                 ? `rounded-2xl ${!isFirstInGroup ? 'rounded-tr-md' : ''} ${!isLastInGroup ? 'rounded-br-md' : ''}`
                 : `rounded-2xl ${!isFirstInGroup ? 'rounded-tl-md' : ''} ${!isLastInGroup ? 'rounded-bl-md' : ''}`
 
+              const tail = isLastInGroup
+                ? isMine
+                  ? "after:absolute after:bottom-0 after:-right-[5px] after:h-3 after:w-3 after:bg-neutral after:[clip-path:polygon(0_0,0_100%,100%_100%)]"
+                  : "after:absolute after:bottom-0 after:-left-[5px] after:h-3 after:w-3 after:border after:border-base-300 after:bg-base-100 after:[clip-path:polygon(100%_0,0_100%,100%_100%)]"
+                : ''
+
               return (
                 <div key={message.id}>
                   {showDateDivider && (
-                    <div className="my-3 flex justify-center">
-                      <span className="rounded-full bg-base-300/70 px-2.5 py-0.5 text-[11px] text-base-content/60">
+                    <div className="my-4 flex justify-center">
+                      <span className="rounded-full bg-base-300/70 px-2.5 py-0.5 text-[11px] font-semibold text-base-content/60">
                         {formatDateDivider(message.createdAt)}
                       </span>
                     </div>
                   )}
 
-                  <div className={`flex ${isMine ? 'justify-end' : 'justify-start'} ${isFirstInGroup ? 'mt-2' : 'mt-0.5'}`}>
+                  <div className={`flex ${isMine ? 'justify-end' : 'justify-start'} ${isFirstInGroup ? 'mt-2.5' : 'mt-0.5'}`}>
                     <div
-                      className={`max-w-[75%] px-3 py-2 text-sm ${bubbleCorners} ${
+                      className={`relative max-w-[78%] px-3.5 py-2 text-sm shadow-sm ${bubbleCorners} ${tail} ${
                         isMine ? 'bg-neutral text-neutral-content' : 'border border-base-300 bg-base-100'
                       }`}
                     >
-                      <p className="whitespace-pre-wrap break-words">{message.content}</p>
+                      <p className="whitespace-pre-wrap break-words leading-snug">{message.content}</p>
                       <span
-                        className={`mt-0.5 block text-right text-[10px] ${
+                        className={`mt-1 block text-right text-[10px] ${
                           isMine ? 'text-neutral-content/60' : 'text-base-content/40'
                         }`}
                       >
