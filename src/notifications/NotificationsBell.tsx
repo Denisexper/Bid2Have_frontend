@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useMarkAllNotificationsRead, useMarkNotificationRead, useNotifications } from './api'
+import { useClearNotifications, useMarkAllNotificationsRead, useMarkNotificationRead, useNotifications } from './api'
 import { notificationIcons, notificationLabels, notificationLink } from './presentation'
 import type { Notification } from './types'
 import { formatRelativeTime } from '../listings/format'
@@ -9,6 +9,7 @@ export function NotificationsBell() {
   const { data } = useNotifications()
   const markRead = useMarkNotificationRead()
   const markAllRead = useMarkAllNotificationsRead()
+  const clearAll = useClearNotifications()
 
   const notifications = data?.notifications ?? []
   const unreadIds = notifications.filter((n) => !n.read).map((n) => n.id)
@@ -26,16 +27,28 @@ export function NotificationsBell() {
       <div tabIndex={0} className="dropdown-content z-30 mt-2 w-80 rounded-box border-2 border-base-300 bg-base-100 p-2 shadow-lg">
         <div className="flex items-center justify-between px-2 py-1">
           <span className="text-xs font-bold text-base-content/60">Notificaciones</span>
-          {unreadIds.length > 0 && (
-            <button
-              type="button"
-              className="btn btn-ghost btn-xs"
-              disabled={markAllRead.isPending}
-              onClick={() => markAllRead.mutate(unreadIds)}
-            >
-              Marcar todas
-            </button>
-          )}
+          <div className="flex gap-1">
+            {unreadIds.length > 0 && (
+              <button
+                type="button"
+                className="btn btn-ghost btn-xs"
+                disabled={markAllRead.isPending}
+                onClick={() => markAllRead.mutate(unreadIds)}
+              >
+                Marcar todas
+              </button>
+            )}
+            {notifications.length > 0 && (
+              <button
+                type="button"
+                className="btn btn-ghost btn-xs"
+                disabled={clearAll.isPending}
+                onClick={() => clearAll.mutate()}
+              >
+                Limpiar
+              </button>
+            )}
+          </div>
         </div>
 
         <ul className="menu menu-sm max-h-96 flex-nowrap overflow-y-auto">

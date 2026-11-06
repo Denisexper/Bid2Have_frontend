@@ -43,3 +43,14 @@ export function useMarkAllNotificationsRead() {
     },
   })
 }
+
+export function useClearNotifications() {
+  const queryClient = useQueryClient()
+
+  return useMutation({
+    mutationFn: () => apiFetch<void>('/notifications', { method: 'DELETE' }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['notifications'] })
+    },
+  })
+}
