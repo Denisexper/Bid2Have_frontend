@@ -20,6 +20,11 @@ export function GoogleLoginButton({ onError }: GoogleLoginButtonProps) {
         })
       }}
       onError={() => onError('No se pudo iniciar sesión con Google')}
+      theme="outline"
+      shape="rectangular"
+      size="large"
+      text="continue_with"
+      width={288}
     />
   )
 }
