@@ -7,7 +7,7 @@ export function AppLayout() {
   return (
     <div className="min-h-screen bg-base-200">
       <TopBar />
-      <main className="mx-auto w-full max-w-2xl px-3 py-3 pb-24">
+      <main className="mx-auto w-full max-w-2xl px-3 py-3 pb-24 md:max-w-3xl md:px-4 lg:max-w-5xl lg:px-6 xl:max-w-6xl">
         <Outlet />
       </main>
       <Link

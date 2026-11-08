@@ -110,16 +110,16 @@ export function NewListingPage() {
   }
 
   return (
-    <div className="mx-auto flex max-w-3xl flex-col gap-3">
-      <h1 className="text-lg font-bold">Publicar</h1>
+    <div className="mx-auto flex w-full max-w-5xl flex-col gap-4 xl:max-w-6xl">
+      <h1 className="text-lg font-bold md:text-xl">Publicar</h1>
 
       <form
         onSubmit={handleSubmit}
-        className="grid border-2 border-base-300 bg-base-100 lg:grid-cols-[1fr_280px]"
+        className="grid border-2 border-base-300 bg-base-100 lg:grid-cols-[1fr_320px]"
       >
-        <div className="flex flex-col gap-4 p-4 lg:border-r-2 lg:border-base-300">
-          <div className="flex flex-col gap-3">
-            <label className="flex flex-col gap-1">
+        <div className="flex flex-col gap-5 p-4 md:p-6 lg:border-r-2 lg:border-base-300">
+          <div className="grid gap-4 md:grid-cols-2">
+            <label className="flex flex-col gap-1 md:col-span-2">
               <span className="text-sm font-semibold text-base-content/70">Título</span>
               <input
                 type="text"
@@ -131,7 +131,7 @@ export function NewListingPage() {
               />
             </label>
 
-            <label className="flex flex-col gap-1">
+            <label className="flex flex-col gap-1 md:col-span-2">
               <span className="text-sm font-semibold text-base-content/70">Descripción</span>
               <textarea
                 className="textarea textarea-bordered"
@@ -143,8 +143,8 @@ export function NewListingPage() {
             </label>
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-base-300 pt-4">
-            <label className="flex flex-col gap-1">
+          <div className="grid gap-4 border-t border-base-300 pt-5 md:grid-cols-2 lg:grid-cols-3">
+            <label className="flex flex-col gap-1 md:col-span-2 lg:col-span-1">
               <span className="text-sm font-semibold text-base-content/70">Categoría</span>
               <select
                 className="select select-bordered"
@@ -164,79 +164,75 @@ export function NewListingPage() {
               </select>
             </label>
 
-            <div className="flex flex-col gap-3 sm:flex-row">
-              <div className="flex flex-1 flex-col gap-1">
-                <span className="text-sm font-semibold text-base-content/70">Condición</span>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    className={`btn flex-1 ${condition === 'NEW' ? 'btn-primary' : 'btn-ghost'}`}
-                    onClick={() => setCondition('NEW')}
-                  >
-                    Nuevo
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn flex-1 ${condition === 'USED' ? 'btn-primary' : 'btn-ghost'}`}
-                    onClick={() => setCondition('USED')}
-                  >
-                    Usado
-                  </button>
-                </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-semibold text-base-content/70">Condición</span>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  className={`btn flex-1 ${condition === 'NEW' ? 'btn-primary' : 'btn-ghost'}`}
+                  onClick={() => setCondition('NEW')}
+                >
+                  Nuevo
+                </button>
+                <button
+                  type="button"
+                  className={`btn flex-1 ${condition === 'USED' ? 'btn-primary' : 'btn-ghost'}`}
+                  onClick={() => setCondition('USED')}
+                >
+                  Usado
+                </button>
               </div>
+            </div>
 
-              <div className="flex flex-1 flex-col gap-1">
-                <span className="text-sm font-semibold text-base-content/70">Modo de venta</span>
-                <div className="flex gap-2">
-                  <button
-                    type="button"
-                    className={`btn flex-1 ${saleMode === 'FREE_OFFER' ? 'btn-primary' : 'btn-ghost'}`}
-                    onClick={() => setSaleMode('FREE_OFFER')}
-                  >
-                    Oferta libre
-                  </button>
-                  <button
-                    type="button"
-                    className={`btn flex-1 ${saleMode === 'AUCTION' ? 'btn-primary' : 'btn-ghost'}`}
-                    onClick={() => setSaleMode('AUCTION')}
-                  >
-                    Subasta
-                  </button>
-                </div>
+            <div className="flex flex-col gap-1">
+              <span className="text-sm font-semibold text-base-content/70">Modo de venta</span>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  className={`btn flex-1 ${saleMode === 'FREE_OFFER' ? 'btn-primary' : 'btn-ghost'}`}
+                  onClick={() => setSaleMode('FREE_OFFER')}
+                >
+                  Oferta libre
+                </button>
+                <button
+                  type="button"
+                  className={`btn flex-1 ${saleMode === 'AUCTION' ? 'btn-primary' : 'btn-ghost'}`}
+                  onClick={() => setSaleMode('AUCTION')}
+                >
+                  Subasta
+                </button>
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col gap-3 border-t border-base-300 pt-4">
-            <div className="flex gap-3">
-              <label className="flex flex-1 flex-col gap-1">
-                <span className="text-sm font-semibold text-base-content/70">Precio</span>
-                <input
-                  type="number"
-                  className="input input-bordered"
-                  value={price}
-                  onChange={(e) => setPrice(e.target.value)}
-                  required
-                  min="0"
-                  step="0.01"
-                />
-              </label>
+          <div className="grid gap-4 border-t border-base-300 pt-5 sm:grid-cols-[1fr_7rem] lg:grid-cols-[1fr_7rem_1fr]">
+            <label className="flex flex-col gap-1">
+              <span className="text-sm font-semibold text-base-content/70">Precio</span>
+              <input
+                type="number"
+                className="input input-bordered"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required
+                min="0"
+                step="0.01"
+              />
+            </label>
 
-              <label className="flex w-28 flex-col gap-1">
-                <span className="text-sm font-semibold text-base-content/70">Moneda</span>
-                <input
-                  type="text"
-                  className="input input-bordered uppercase"
-                  value={currency}
-                  onChange={(e) => setCurrency(e.target.value.toUpperCase())}
-                  maxLength={3}
-                  required
-                />
-              </label>
-            </div>
+            <label className="flex flex-col gap-1">
+              <span className="text-sm font-semibold text-base-content/70">Moneda</span>
+              <input
+                type="text"
+                className="input input-bordered uppercase"
+                value={currency}
+                onChange={(e) => setCurrency(e.target.value.toUpperCase())}
+                maxLength={3}
+                required
+              />
+            </label>
 
             {saleMode === 'AUCTION' && (
-              <label className="flex flex-col gap-1">
+              <label className="flex flex-col gap-1 sm:col-span-2 lg:col-span-1">
                 <span className="text-sm font-semibold text-base-content/70">Cierre de la subasta</span>
                 <input
                   type="datetime-local"
@@ -249,7 +245,7 @@ export function NewListingPage() {
             )}
           </div>
 
-          <label className="flex flex-col gap-1 border-t border-base-300 pt-4">
+          <label className="flex flex-col gap-1 border-t border-base-300 pt-5">
             <span className="text-sm font-semibold text-base-content/70">Fotos (una URL por línea, opcional)</span>
             <textarea
               className="textarea textarea-bordered"
@@ -261,9 +257,9 @@ export function NewListingPage() {
           </label>
         </div>
 
-        <aside className="flex flex-col gap-2 border-t-2 border-base-300 bg-base-200 p-4 lg:border-t-0">
+        <aside className="flex flex-col gap-2 border-t-2 border-base-300 bg-base-200 p-4 md:p-6 lg:sticky lg:top-16 lg:h-fit lg:border-t-0">
           <h2 className="text-sm font-semibold text-base-content/70">Resumen de publicación</h2>
-          <span className="font-display text-2xl tabular-nums">{safeFormatPrice(price, currency)}</span>
+          <span className="font-display text-3xl tabular-nums">{safeFormatPrice(price, currency)}</span>
 
           <div className="flex flex-col gap-1.5 border-t border-base-300 pt-3">
             {checklist.map((item) => (
