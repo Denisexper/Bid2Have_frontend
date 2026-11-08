@@ -18,11 +18,14 @@ export function useListingOffers(listingId: string, enabled: boolean) {
   })
 }
 
+const OFFER_POLL_INTERVAL = 20_000
+
 export function useOffer(offerId: string | null) {
   return useQuery({
     queryKey: ['offers', offerId],
     queryFn: () => apiFetch<OfferResponse>(`/offers/${offerId}`),
     enabled: Boolean(offerId),
+    refetchInterval: OFFER_POLL_INTERVAL,
   })
 }
 
@@ -49,6 +52,7 @@ function useOfferAction(action: 'accept' | 'reject' | 'counter', listingId: stri
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['listings', listingId, 'offers'] })
+      queryClient.invalidateQueries({ queryKey: ['offers'] })
       queryClient.invalidateQueries({ queryKey: ['chats'] })
     },
   })

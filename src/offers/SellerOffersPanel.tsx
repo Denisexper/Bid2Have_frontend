@@ -1,9 +1,8 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ApiError } from '../api/client'
 import { useChats } from '../chat/api'
 import { formatPrice, formatRelativeTime } from '../listings/format'
-import { useAcceptOffer, useCounterOffer, useListingOffers, useRejectOffer } from './api'
+import { useListingOffers } from './api'
+import { OfferResponseActions } from './OfferResponseActions'
 import { offerStatusLabels } from './statusLabels'
 import type { Offer } from './types'
 import { RateOfferButton } from '../ratings/RateOfferButton'
@@ -44,86 +43,30 @@ export function SellerOffersPanel({ listingId, currency }: SellerOffersPanelProp
 }
 
 function OfferRow({ offer, listingId, currency }: { offer: Offer; listingId: string; currency: string }) {
-  const [isCountering, setIsCountering] = useState(false)
-  const [counterAmount, setCounterAmount] = useState('')
-
-  const accept = useAcceptOffer(listingId)
-  const reject = useRejectOffer(listingId)
-  const counter = useCounterOffer(listingId)
   const { data: chatsData } = useChats()
   const chat = chatsData?.chats.find((c) => c.offerId === offer.id)
-
-  const error = accept.error ?? reject.error ?? counter.error
-  const isPending = accept.isPending || reject.isPending || counter.isPending
-
-  function submitCounter(): void {
-    const amount = Number(counterAmount)
-    if (!amount || amount <= 0) return
-    counter.mutate(
-      { offerId: offer.id, amount },
-      { onSuccess: () => setIsCountering(false) },
-    )
-  }
 
   return (
     <li className="border border-base-300 bg-base-200 p-3 text-sm">
       <div className="flex items-center justify-between">
         <span className="font-mono font-bold">{formatPrice(offer.amount, currency)}</span>
-        <span className="badge badge-ghost badge-sm">{offerStatusLabels[offer.status]}</span>
+        <span className="badge badge-ghost badge-sm">
+          {offer.proposedBySeller && offer.status === 'PENDING' ? 'Esperando al comprador' : offerStatusLabels[offer.status]}
+        </span>
       </div>
       <div className="mt-0.5 text-[11px] text-base-content/50">
         Comprador #{offer.buyerId.slice(0, 8)} · {formatRelativeTime(offer.createdAt)}
       </div>
 
-      {offer.status === 'PENDING' && (
-        <div className="mt-2 flex flex-col gap-2">
-          {!isCountering ? (
-            <div className="flex gap-2">
-              <button
-                type="button"
-                className="btn btn-success btn-xs"
-                disabled={isPending}
-                onClick={() => accept.mutate({ offerId: offer.id })}
-              >
-                Aceptar
-              </button>
-              <button
-                type="button"
-                className="btn btn-error btn-xs"
-                disabled={isPending}
-                onClick={() => reject.mutate({ offerId: offer.id })}
-              >
-                Rechazar
-              </button>
-              <button
-                type="button"
-                className="btn btn-ghost btn-xs"
-                disabled={isPending}
-                onClick={() => setIsCountering(true)}
-              >
-                Contraofertar
-              </button>
-            </div>
-          ) : (
-            <div className="flex gap-2">
-              <input
-                type="number"
-                className="input input-bordered input-xs w-24"
-                value={counterAmount}
-                onChange={(e) => setCounterAmount(e.target.value)}
-                placeholder="Monto"
-                min="0"
-                step="0.01"
-                autoFocus
-              />
-              <button type="button" className="btn btn-primary btn-xs" disabled={isPending} onClick={submitCounter}>
-                Enviar
-              </button>
-              <button type="button" className="btn btn-ghost btn-xs" onClick={() => setIsCountering(false)}>
-                Cancelar
-              </button>
-            </div>
-          )}
+      {offer.status === 'PENDING' && offer.proposedBySeller && (
+        <p className="mt-2 text-xs text-base-content/50">
+          Le mandaste una contraoferta al comprador. Te avisamos cuando responda.
+        </p>
+      )}
+
+      {offer.status === 'PENDING' && !offer.proposedBySeller && (
+        <div className="mt-2">
+          <OfferResponseActions offerId={offer.id} listingId={listingId} />
         </div>
       )}
 
@@ -138,12 +81,6 @@ function OfferRow({ offer, listingId, currency }: { offer: Offer; listingId: str
           )}
           <RateOfferButton offerId={offer.id} label="Calificar al comprador" />
         </div>
-      )}
-
-      {error && (
-        <p className="mt-1 text-xs text-error">
-          {error instanceof ApiError ? error.message : 'No pudimos procesar la acción.'}
-        </p>
       )}
     </li>
   )

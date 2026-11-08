@@ -7,6 +7,7 @@ import { formatPrice } from '../listings/format'
 import type { Listing } from '../listings/types'
 import { useCreateOffer, useOffer } from './api'
 import { getMyOfferId, setMyOfferId } from './myOfferStorage'
+import { OfferResponseActions } from './OfferResponseActions'
 import { offerStatusLabels } from './statusLabels'
 import { RateOfferButton } from '../ratings/RateOfferButton'
 
@@ -69,7 +70,9 @@ function BuyerOfferPanelInner({ listing, userId }: { listing: Listing; userId: s
 
       return (
         <div className="border-2 border-base-300 bg-base-100 p-4">
-          <h2 className="mb-1 text-sm font-bold text-base-content/70">Tu oferta</h2>
+          <h2 className="mb-1 text-sm font-bold text-base-content/70">
+            {offer.status === 'PENDING' && offer.proposedBySeller ? 'Contraoferta del vendedor' : 'Tu oferta'}
+          </h2>
           <p className="text-sm">
             {formatPrice(offer.amount, listing.currency)} · {offerStatusLabels[offer.status]}
           </p>
@@ -94,11 +97,15 @@ function BuyerOfferPanelInner({ listing, userId }: { listing: Listing; userId: s
 
           {offer.status === 'REJECTED' && <p className="mt-2 text-sm text-error">El vendedor rechazó tu oferta.</p>}
 
-          {offer.status === 'COUNTERED' && (
-            <p className="mt-2 text-sm text-warning">
-              El vendedor te hizo una contraoferta. Todavía no podemos mostrártela acá — fijate en tus
-              notificaciones cuando esa sección esté disponible.
-            </p>
+          {offer.status === 'PENDING' && offer.proposedBySeller && (
+            <div className="mt-2">
+              <p className="mb-2 text-sm text-warning">El vendedor te hizo una contraoferta.</p>
+              <OfferResponseActions offerId={offer.id} listingId={listing.id} />
+            </div>
+          )}
+
+          {offer.status === 'PENDING' && !offer.proposedBySeller && (
+            <p className="mt-2 text-xs text-base-content/50">Esperando respuesta del vendedor.</p>
           )}
         </div>
       )

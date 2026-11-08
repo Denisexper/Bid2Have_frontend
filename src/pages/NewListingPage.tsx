@@ -5,7 +5,11 @@ import { useCreateListing } from '../listings/api'
 import type { ListingCondition, SaleMode } from '../listings/types'
 import { ApiError } from '../api/client'
 import { formatPrice } from '../listings/format'
-import { IconImage } from '../components/icons'
+import { IconChevronDown, IconImage } from '../components/icons'
+
+const labelClass = 'text-xs font-semibold text-base-content/45'
+const fieldClass =
+  'w-full border-0 border-b-2 border-base-300 bg-transparent px-0 py-2 text-[15px] text-base-content outline-none transition-colors placeholder:text-base-content/30 focus:border-base-content'
 
 function safeFormatPrice(price: string, currency: string): string {
   if (!price || currency.length !== 3) {
@@ -124,12 +128,12 @@ export function NewListingPage() {
         className="grid border-2 border-base-300 bg-base-100 lg:grid-cols-[1fr_320px]"
       >
         <div className="flex flex-col gap-5 p-4 md:p-6 lg:border-r-2 lg:border-base-300">
-          <div className="grid gap-4 md:grid-cols-2">
-            <label className="flex flex-col gap-1 md:col-span-2">
-              <span className="text-sm font-semibold text-base-content/70">Título</span>
+          <div className="grid gap-5 md:grid-cols-2">
+            <label className="flex flex-col gap-1.5 md:col-span-2">
+              <span className={labelClass}>Título</span>
               <input
                 type="text"
-                className="input input-bordered"
+                className={fieldClass}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
                 required
@@ -137,10 +141,10 @@ export function NewListingPage() {
               />
             </label>
 
-            <label className="flex flex-col gap-1 md:col-span-2">
-              <span className="text-sm font-semibold text-base-content/70">Descripción</span>
+            <label className="flex flex-col gap-1.5 md:col-span-2">
+              <span className={labelClass}>Descripción</span>
               <textarea
-                className="textarea textarea-bordered"
+                className={`${fieldClass} resize-none`}
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
                 required
@@ -149,29 +153,34 @@ export function NewListingPage() {
             </label>
           </div>
 
-          <div className="grid gap-4 border-t border-base-300 pt-5 md:grid-cols-2 lg:grid-cols-3">
-            <label className="flex flex-col gap-1 md:col-span-2 lg:col-span-1">
-              <span className="text-sm font-semibold text-base-content/70">Categoría</span>
-              <select
-                className="select select-bordered"
-                value={categoryId}
-                onChange={(e) => setCategoryId(e.target.value)}
-                required
-                disabled={isLoadingCategories}
-              >
-                <option value="" disabled>
-                  {isLoadingCategories ? 'Cargando...' : 'Elegí una categoría'}
-                </option>
-                {categories.map((category) => (
-                  <option key={category.id} value={category.id}>
-                    {category.name}
+          <div className="grid gap-5 border-t border-base-300 pt-5 md:grid-cols-2 lg:grid-cols-3">
+            <label className="flex flex-col gap-1.5 md:col-span-2 lg:col-span-1">
+              <span className={labelClass}>Categoría</span>
+              <div className="relative">
+                <select
+                  className={`${fieldClass} appearance-none pr-6`}
+                  value={categoryId}
+                  onChange={(e) => setCategoryId(e.target.value)}
+                  required
+                  disabled={isLoadingCategories}
+                >
+                  <option value="" disabled>
+                    {isLoadingCategories ? 'Cargando...' : 'Elegí una categoría'}
                   </option>
-                ))}
-              </select>
+                  {categories.map((category) => (
+                    <option key={category.id} value={category.id}>
+                      {category.name}
+                    </option>
+                  ))}
+                </select>
+                <span className="pointer-events-none absolute top-1/2 right-0 h-4 w-4 -translate-y-1/2 text-base-content/40">
+                  <IconChevronDown />
+                </span>
+              </div>
             </label>
 
-            <div className="flex flex-col gap-1">
-              <span className="text-sm font-semibold text-base-content/70">Condición</span>
+            <div className="flex flex-col gap-1.5">
+              <span className={labelClass}>Condición</span>
               <div className="flex gap-2">
                 <button
                   type="button"
@@ -190,8 +199,8 @@ export function NewListingPage() {
               </div>
             </div>
 
-            <div className="flex flex-col gap-1">
-              <span className="text-sm font-semibold text-base-content/70">Modo de venta</span>
+            <div className="flex flex-col gap-1.5">
+              <span className={labelClass}>Modo de venta</span>
               <div className="flex gap-2">
                 <button
                   type="button"
@@ -211,12 +220,12 @@ export function NewListingPage() {
             </div>
           </div>
 
-          <div className="grid gap-4 border-t border-base-300 pt-5 sm:grid-cols-[1fr_7rem] lg:grid-cols-[1fr_7rem_1fr]">
-            <label className="flex flex-col gap-1">
-              <span className="text-sm font-semibold text-base-content/70">Precio</span>
+          <div className="grid gap-5 border-t border-base-300 pt-5 sm:grid-cols-[1fr_7rem] lg:grid-cols-[1fr_7rem_1fr]">
+            <label className="flex flex-col gap-1.5">
+              <span className={labelClass}>Precio</span>
               <input
                 type="number"
-                className="input input-bordered"
+                className={fieldClass}
                 value={price}
                 onChange={(e) => setPrice(e.target.value)}
                 required
@@ -225,11 +234,11 @@ export function NewListingPage() {
               />
             </label>
 
-            <label className="flex flex-col gap-1">
-              <span className="text-sm font-semibold text-base-content/70">Moneda</span>
+            <label className="flex flex-col gap-1.5">
+              <span className={labelClass}>Moneda</span>
               <input
                 type="text"
-                className="input input-bordered uppercase"
+                className={`${fieldClass} uppercase`}
                 value={currency}
                 onChange={(e) => setCurrency(e.target.value.toUpperCase())}
                 maxLength={3}
@@ -238,11 +247,11 @@ export function NewListingPage() {
             </label>
 
             {saleMode === 'AUCTION' && (
-              <label className="flex flex-col gap-1 sm:col-span-2 lg:col-span-1">
-                <span className="text-sm font-semibold text-base-content/70">Cierre de la subasta</span>
+              <label className="flex flex-col gap-1.5 sm:col-span-2 lg:col-span-1">
+                <span className={labelClass}>Cierre de la subasta</span>
                 <input
                   type="datetime-local"
-                  className="input input-bordered"
+                  className={fieldClass}
                   value={auctionEndAt}
                   onChange={(e) => setAuctionEndAt(e.target.value)}
                   required
@@ -251,10 +260,10 @@ export function NewListingPage() {
             )}
           </div>
 
-          <label className="flex flex-col gap-1 border-t border-base-300 pt-5">
-            <span className="text-sm font-semibold text-base-content/70">Fotos (una URL por línea, opcional)</span>
+          <label className="flex flex-col gap-1.5 border-t border-base-300 pt-5">
+            <span className={labelClass}>Fotos (una URL por línea, opcional)</span>
             <textarea
-              className="textarea textarea-bordered"
+              className={`${fieldClass} resize-none`}
               value={photosText}
               onChange={(e) => setPhotosText(e.target.value)}
               rows={3}
