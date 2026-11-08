@@ -5,6 +5,7 @@ import { useCreateListing } from '../listings/api'
 import type { ListingCondition, SaleMode } from '../listings/types'
 import { ApiError } from '../api/client'
 import { formatPrice } from '../listings/format'
+import { IconImage } from '../components/icons'
 
 function safeFormatPrice(price: string, currency: string): string {
   if (!price || currency.length !== 3) {
@@ -39,6 +40,11 @@ export function NewListingPage() {
   const [formError, setFormError] = useState<string | null>(null)
 
   const categories = categoriesData?.categories ?? []
+  const categoryName = categories.find((c) => c.id === categoryId)?.name
+  const previewPhoto = photosText
+    .split('\n')
+    .map((url) => url.trim())
+    .find(Boolean)
 
   const checklist = [
     { label: 'Título', done: title.trim().length > 0 },
@@ -257,9 +263,33 @@ export function NewListingPage() {
           </label>
         </div>
 
-        <aside className="flex flex-col gap-2 border-t-2 border-base-300 bg-base-200 p-4 md:p-6 lg:sticky lg:top-16 lg:h-fit lg:border-t-0">
-          <h2 className="text-sm font-semibold text-base-content/70">Resumen de publicación</h2>
-          <span className="font-display text-3xl tabular-nums">{safeFormatPrice(price, currency)}</span>
+        <aside className="flex flex-col gap-4 border-t-2 border-base-300 bg-base-200 p-4 md:p-6 lg:sticky lg:top-16 lg:self-start lg:border-t-0">
+          <div>
+            <h2 className="text-sm font-semibold text-base-content/70">Vista previa</h2>
+            <p className="text-xs text-base-content/40">Así la va a ver quien navegue el feed.</p>
+          </div>
+
+          <div className="overflow-hidden border-2 border-base-300 bg-base-100">
+            <div className="relative aspect-video border-b-2 border-base-300 bg-base-200">
+              {previewPhoto ? (
+                <img src={previewPhoto} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-base-content/25">
+                  <span className="h-8 w-8">
+                    <IconImage />
+                  </span>
+                </div>
+              )}
+            </div>
+            <div className="flex flex-col gap-1.5 p-3">
+              <div className="flex items-center justify-between text-[11px] font-semibold text-base-content/60">
+                <span>{categoryName ?? (condition === 'NEW' ? 'Nuevo' : 'Usado')}</span>
+                <span>{saleMode === 'AUCTION' ? 'Subasta' : 'Oferta libre'}</span>
+              </div>
+              <h3 className="line-clamp-2 text-sm font-bold leading-snug">{title || 'Tu título acá'}</h3>
+              <span className="font-display text-2xl tabular-nums">{safeFormatPrice(price, currency)}</span>
+            </div>
+          </div>
 
           <div className="flex flex-col gap-1.5 border-t border-base-300 pt-3">
             {checklist.map((item) => (
@@ -297,7 +327,7 @@ export function NewListingPage() {
 
           {formError && <p className="text-sm text-error">{formError}</p>}
 
-          <button type="submit" className="btn btn-primary mt-auto" disabled={createListing.isPending || !canPublish}>
+          <button type="submit" className="btn btn-primary" disabled={createListing.isPending || !canPublish}>
             {createListing.isPending ? <span className="loading loading-spinner loading-sm" /> : 'Publicar'}
           </button>
         </aside>
