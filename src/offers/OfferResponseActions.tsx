@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { ApiError } from '../api/client'
 import { useAcceptOffer, useCounterOffer, useRejectOffer } from './api'
+import { fieldClassSm } from './styles'
 
 interface OfferResponseActionsProps {
   offerId: string
@@ -57,7 +58,7 @@ export function OfferResponseActions({ offerId, listingId }: OfferResponseAction
         <div className="flex gap-2">
           <input
             type="number"
-            className="input input-bordered input-xs w-24"
+            className={`${fieldClassSm} w-24`}
             value={counterAmount}
             onChange={(e) => setCounterAmount(e.target.value)}
             placeholder="Monto"
