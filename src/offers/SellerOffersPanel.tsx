@@ -54,7 +54,7 @@ function OfferRow({ offer, listingId, currency }: { offer: Offer; listingId: str
   return (
     <li className="border border-base-300 bg-base-200 p-3 text-sm">
       <div className="flex items-center justify-between">
-        <span className="font-mono font-bold">{formatPrice(offer.amount, currency)}</span>
+        <span className="font-mono text-base font-extrabold tabular-nums">{formatPrice(offer.amount, currency)}</span>
         <span className="badge badge-ghost badge-sm">
           {offer.proposedBySeller && offer.status === 'PENDING' ? 'Esperando al comprador' : offerStatusLabels[offer.status]}
         </span>
