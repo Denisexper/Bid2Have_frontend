@@ -16,6 +16,38 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+    /* Path aliases (kept in sync with vite.config.ts resolve.alias) */
+    "paths": {
+      "@api": ["./src/api"],
+      "@api/*": ["./src/api/*"],
+      "@auth": ["./src/auth"],
+      "@auth/*": ["./src/auth/*"],
+      "@categories": ["./src/categories"],
+      "@categories/*": ["./src/categories/*"],
+      "@chat": ["./src/chat"],
+      "@chat/*": ["./src/chat/*"],
+      "@components": ["./src/components"],
+      "@components/*": ["./src/components/*"],
+      "@follows": ["./src/follows"],
+      "@follows/*": ["./src/follows/*"],
+      "@listings": ["./src/listings"],
+      "@listings/*": ["./src/listings/*"],
+      "@notifications": ["./src/notifications"],
+      "@notifications/*": ["./src/notifications/*"],
+      "@offers": ["./src/offers"],
+      "@offers/*": ["./src/offers/*"],
+      "@pages": ["./src/pages"],
+      "@pages/*": ["./src/pages/*"],
+      "@ratings": ["./src/ratings"],
+      "@ratings/*": ["./src/ratings/*"],
+      "@reports": ["./src/reports"],
+      "@reports/*": ["./src/reports/*"],
+      "@theme": ["./src/theme"],
+      "@theme/*": ["./src/theme/*"],
+      "@users": ["./src/users"],
+      "@users/*": ["./src/users/*"]
+    },
+
     /* Linting */
     "noUnusedLocals": true,
     "noUnusedParameters": true,
