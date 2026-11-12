@@ -9,6 +9,7 @@ import { useCreateOffer, useOffer } from './api'
 import { getMyOfferId, setMyOfferId } from './myOfferStorage'
 import { OfferResponseActions } from './OfferResponseActions'
 import { offerStatusLabels } from './statusLabels'
+import { fieldClass } from './styles'
 import { RateOfferButton } from '../ratings/RateOfferButton'
 
 interface BuyerOfferPanelProps {
@@ -123,10 +124,10 @@ function BuyerOfferPanelInner({ listing, userId }: { listing: Listing; userId: s
   return (
     <form onSubmit={handleSubmit} className="border-2 border-base-300 bg-base-100 p-4">
       <h2 className="mb-2 text-sm font-bold text-base-content/70">Hacer una oferta</h2>
-      <div className="flex gap-2">
+      <div className="flex items-end gap-2">
         <input
           type="number"
-          className="input input-bordered flex-1"
+          className={`${fieldClass} flex-1`}
           value={amount}
           onChange={(e) => setAmount(e.target.value)}
           placeholder={`Monto en ${listing.currency}`}
