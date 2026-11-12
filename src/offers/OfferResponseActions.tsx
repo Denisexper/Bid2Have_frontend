@@ -28,10 +28,10 @@ export function OfferResponseActions({ offerId, listingId }: OfferResponseAction
   return (
     <div className="flex flex-col gap-2">
       {!isCountering ? (
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2">
           <button
             type="button"
-            className="btn btn-success btn-xs"
+            className="btn btn-primary btn-xs"
             disabled={isPending}
             onClick={() => accept.mutate({ offerId })}
           >
@@ -39,7 +39,7 @@ export function OfferResponseActions({ offerId, listingId }: OfferResponseAction
           </button>
           <button
             type="button"
-            className="btn btn-error btn-xs"
+            className="btn btn-outline btn-error btn-xs"
             disabled={isPending}
             onClick={() => reject.mutate({ offerId })}
           >
@@ -55,7 +55,7 @@ export function OfferResponseActions({ offerId, listingId }: OfferResponseAction
           </button>
         </div>
       ) : (
-        <div className="flex gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <input
             type="number"
             className={`${fieldClassSm} w-24`}
