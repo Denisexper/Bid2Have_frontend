@@ -17,7 +17,12 @@ export function SellerOffersPanel({ listingId, currency }: SellerOffersPanelProp
 
   return (
     <div className="border-2 border-base-300 bg-base-100 p-4">
-      <h2 className="mb-2 text-sm font-bold text-base-content/70">Ofertas recibidas</h2>
+      <div className="mb-2 flex items-baseline justify-between">
+        <h2 className="text-sm font-bold text-base-content/70">Ofertas recibidas</h2>
+        {data && data.offers.length > 0 && (
+          <span className="text-xs text-base-content/40">{data.offers.length}</span>
+        )}
+      </div>
 
       {isLoading && (
         <div className="flex justify-center py-4">
