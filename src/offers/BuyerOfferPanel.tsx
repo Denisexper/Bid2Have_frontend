@@ -74,9 +74,12 @@ function BuyerOfferPanelInner({ listing, userId }: { listing: Listing; userId: s
           <h2 className="mb-1 text-sm font-bold text-base-content/70">
             {offer.status === 'PENDING' && offer.proposedBySeller ? 'Contraoferta del vendedor' : 'Tu oferta'}
           </h2>
-          <p className="text-sm">
-            {formatPrice(offer.amount, listing.currency)} · {offerStatusLabels[offer.status]}
-          </p>
+          <div className="flex items-baseline gap-2">
+            <span className="font-mono text-xl font-extrabold tabular-nums">
+              {formatPrice(offer.amount, listing.currency)}
+            </span>
+            <span className="text-xs text-base-content/50">{offerStatusLabels[offer.status]}</span>
+          </div>
 
           {offer.status === 'ACCEPTED' && (
             <>
