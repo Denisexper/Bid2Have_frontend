@@ -22,7 +22,7 @@ export function BuyerOfferPanel({ listing }: BuyerOfferPanelProps) {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-between border-2 border-base-300 bg-base-100 p-4">
+      <div className="flex flex-wrap items-center justify-between gap-2 border-2 border-base-300 bg-base-100 p-4">
         <span className="text-sm text-base-content/70">Iniciá sesión para hacer una oferta.</span>
         <Link to="/login" state={{ from: location }} className="btn btn-primary btn-sm">
           Iniciar sesión
