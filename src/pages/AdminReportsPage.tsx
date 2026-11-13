@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ApiError } from '../api/client'
-import { formatRelativeTime } from '../listings/format'
-import { useDismissReport, useReports, useReviewReport } from '../reports/api'
-import { reportStatusLabels, reportTargetTypeLabels } from '../reports/labels'
-import type { Report, ReportStatus } from '../reports/types'
+import { ApiError } from '@api/client'
+import { formatRelativeTime } from '@listings/format'
+import { useDismissReport, useReports, useReviewReport } from '@reports/api'
+import { reportStatusLabels, reportTargetTypeLabels } from '@reports/labels'
+import type { Report, ReportStatus } from '@reports/types'
 
 const statusFilters: Array<{ value: ReportStatus | 'ALL'; label: string }> = [
   { value: 'PENDING', label: 'Pendientes' },

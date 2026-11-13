@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import { Navigate, useLocation, type Location } from 'react-router-dom'
-import { useAuth } from '../auth/AuthContext'
-import { GoogleLoginButton } from '../auth/GoogleLoginButton'
-import { consumeSessionExpiredFlag } from '../api/client'
+import { useAuth } from '@auth/AuthContext'
+import { GoogleLoginButton } from '@auth/GoogleLoginButton'
+import { consumeSessionExpiredFlag } from '@api/client'
 
 export function LoginPage() {
   const { user } = useAuth()

@@ -1,11 +1,11 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useCategories } from '../categories/api'
-import { useCreateListing } from '../listings/api'
-import type { ListingCondition, SaleMode } from '../listings/types'
-import { ApiError } from '../api/client'
-import { formatPrice } from '../listings/format'
-import { IconChevronDown, IconImage } from '../components/icons'
+import { useCategories } from '@categories/api'
+import { useCreateListing } from '@listings/api'
+import type { ListingCondition, SaleMode } from '@listings/types'
+import { ApiError } from '@api/client'
+import { formatPrice } from '@listings/format'
+import { IconChevronDown, IconImage } from '@components/icons'
 
 const labelClass = 'text-xs font-semibold text-base-content/45'
 const fieldClass =

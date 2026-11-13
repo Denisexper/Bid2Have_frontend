@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
-import { useAuth } from '../auth/AuthContext'
-import { useChats } from '../chat/api'
-import type { Chat } from '../chat/types'
-import { useListing } from '../listings/api'
-import { formatRelativeTime } from '../listings/format'
-import { useNotifications } from '../notifications/api'
-import { IconChat } from '../components/icons'
+import { useAuth } from '@auth/AuthContext'
+import { useChats } from '@chat/api'
+import type { Chat } from '@chat/types'
+import { useListing } from '@listings/api'
+import { formatRelativeTime } from '@listings/format'
+import { useNotifications } from '@notifications/api'
+import { IconChat } from '@components/icons'
 
 export function ChatsPage() {
   const { data, isLoading, isError } = useChats()

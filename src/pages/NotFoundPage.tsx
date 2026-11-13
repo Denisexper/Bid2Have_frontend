@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom'
-import { IconSearch } from '../components/icons'
+import { IconSearch } from '@components/icons'
 
 export function NotFoundPage() {
   return (

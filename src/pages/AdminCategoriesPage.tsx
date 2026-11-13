@@ -1,8 +1,8 @@
 import { useState, type FormEvent } from 'react'
-import { ApiError } from '../api/client'
-import { useCategories, useCreateCategory, useDeleteCategory, useUpdateCategory } from '../categories/api'
-import { slugify } from '../categories/slugify'
-import type { Category } from '../categories/types'
+import { ApiError } from '@api/client'
+import { useCategories, useCreateCategory, useDeleteCategory, useUpdateCategory } from '@categories/api'
+import { slugify } from '@categories/slugify'
+import type { Category } from '@categories/types'
 
 export function AdminCategoriesPage() {
   const { data, isLoading, isError } = useCategories()

@@ -1,9 +1,9 @@
 import { useState } from 'react'
-import { useAuth } from '../auth/AuthContext'
-import { ApiError } from '../api/client'
-import { formatRelativeTime } from '../listings/format'
-import { useAdminUsers, useReactivateUser, useSuspendUser } from '../users/api'
-import type { AdminUser, UserStatus } from '../users/types'
+import { useAuth } from '@auth/AuthContext'
+import { ApiError } from '@api/client'
+import { formatRelativeTime } from '@listings/format'
+import { useAdminUsers, useReactivateUser, useSuspendUser } from '@users/api'
+import type { AdminUser, UserStatus } from '@users/types'
 
 const statusFilters: Array<{ value: UserStatus | 'ALL'; label: string }> = [
   { value: 'ALL', label: 'Todos' },

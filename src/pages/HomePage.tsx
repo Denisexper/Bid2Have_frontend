@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { useCategories } from '../categories/api'
-import { useListings } from '../listings/api'
-import { ListingCard } from '../listings/ListingCard'
-import { IconFeed, IconPin, IconSearch } from '../components/icons'
+import { useCategories } from '@categories/api'
+import { useListings } from '@listings/api'
+import { ListingCard } from '@listings/ListingCard'
+import { IconFeed, IconPin, IconSearch } from '@components/icons'
 
 type GeoStatus = 'idle' | 'loading' | 'error'
 

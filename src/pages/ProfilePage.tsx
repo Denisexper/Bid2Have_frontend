@@ -1,12 +1,12 @@
-import { useAuth } from '../auth/AuthContext'
-import { useUserRatings } from '../ratings/api'
-import { formatRelativeTime } from '../listings/format'
-import { useListings } from '../listings/api'
-import { ListingCard } from '../listings/ListingCard'
-import { useFollowing, useUnfollowUser } from '../follows/api'
-import { ApiError } from '../api/client'
-import { StarRating } from '../ratings/StarRating'
-import { IconStar } from '../components/icons'
+import { useAuth } from '@auth/AuthContext'
+import { useUserRatings } from '@ratings/api'
+import { formatRelativeTime } from '@listings/format'
+import { useListings } from '@listings/api'
+import { ListingCard } from '@listings/ListingCard'
+import { useFollowing, useUnfollowUser } from '@follows/api'
+import { ApiError } from '@api/client'
+import { StarRating } from '@ratings/StarRating'
+import { IconStar } from '@components/icons'
 
 export function ProfilePage() {
   const { user } = useAuth()

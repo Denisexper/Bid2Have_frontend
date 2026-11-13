@@ -1,12 +1,12 @@
 import { useEffect, useRef, useState, type FormEvent } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { useAuth } from '../auth/AuthContext'
-import { useChat, useChatMessages } from '../chat/api'
-import { formatDateDivider, formatMessageTime, isSameCalendarDay } from '../chat/format'
-import { getChatSocket } from '../chat/socket'
-import type { Message } from '../chat/types'
-import { useListing } from '../listings/api'
-import { IconArrowLeft, IconChat, IconSend } from '../components/icons'
+import { useAuth } from '@auth/AuthContext'
+import { useChat, useChatMessages } from '@chat/api'
+import { formatDateDivider, formatMessageTime, isSameCalendarDay } from '@chat/format'
+import { getChatSocket } from '@chat/socket'
+import type { Message } from '@chat/types'
+import { useListing } from '@listings/api'
+import { IconArrowLeft, IconChat, IconSend } from '@components/icons'
 
 const FIVE_MINUTES_MS = 5 * 60 * 1000
 
