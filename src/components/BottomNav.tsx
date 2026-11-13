@@ -1,6 +1,6 @@
 import { NavLink } from 'react-router-dom'
-import { useAuth } from '../auth/AuthContext'
-import { useNotifications } from '../notifications/api'
+import { useAuth } from '@auth/AuthContext'
+import { useNotifications } from '@notifications/api'
 import { IconChat, IconFeed, IconProfile } from './icons'
 
 const tabs = [
