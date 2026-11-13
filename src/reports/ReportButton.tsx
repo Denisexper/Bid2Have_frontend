@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useAuth } from '../auth/AuthContext'
-import { ApiError } from '../api/client'
+import { useAuth } from '@auth/AuthContext'
+import { ApiError } from '@api/client'
 import { useCreateReport } from './api'
 import type { ReportTargetType } from './types'
 

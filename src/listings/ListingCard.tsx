@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
-import { useCategories } from '../categories/api'
+import { useCategories } from '@categories/api'
 import type { Listing } from './types'
 import { formatCountdown, formatPrice, formatRelativeTime } from './format'
-import { IconClock, IconImage } from '../components/icons'
+import { IconClock, IconImage } from '@components/icons'
 
 interface ListingCardProps {
   listing: Listing

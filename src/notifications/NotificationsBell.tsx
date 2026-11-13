@@ -2,8 +2,8 @@ import { Link } from 'react-router-dom'
 import { useClearNotifications, useMarkAllNotificationsRead, useMarkNotificationRead, useNotifications } from './api'
 import { notificationIcons, notificationLabels, notificationLink } from './presentation'
 import type { Notification } from './types'
-import { formatRelativeTime } from '../listings/format'
-import { IconBell } from '../components/icons'
+import { formatRelativeTime } from '@listings/format'
+import { IconBell } from '@components/icons'
 
 export function NotificationsBell() {
   const { data } = useNotifications()

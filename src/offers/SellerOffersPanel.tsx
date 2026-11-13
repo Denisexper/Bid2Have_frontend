@@ -1,11 +1,11 @@
 import { Link } from 'react-router-dom'
-import { useChats } from '../chat/api'
-import { formatPrice, formatRelativeTime } from '../listings/format'
+import { useChats } from '@chat/api'
+import { formatPrice, formatRelativeTime } from '@listings/format'
 import { useListingOffers } from './api'
 import { OfferResponseActions } from './OfferResponseActions'
 import { offerStatusLabels } from './statusLabels'
 import type { Offer } from './types'
-import { RateOfferButton } from '../ratings/RateOfferButton'
+import { RateOfferButton } from '@ratings/RateOfferButton'
 
 interface SellerOffersPanelProps {
   listingId: string

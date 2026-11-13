@@ -1,16 +1,16 @@
 import { useState, type FormEvent } from 'react'
 import { Link, useLocation } from 'react-router-dom'
-import { useAuth } from '../auth/AuthContext'
-import { ApiError } from '../api/client'
-import { useChats } from '../chat/api'
-import { formatPrice } from '../listings/format'
-import type { Listing } from '../listings/types'
+import { useAuth } from '@auth/AuthContext'
+import { ApiError } from '@api/client'
+import { useChats } from '@chat/api'
+import { formatPrice } from '@listings/format'
+import type { Listing } from '@listings/types'
 import { useCreateOffer, useOffer } from './api'
 import { getMyOfferId, setMyOfferId } from './myOfferStorage'
 import { OfferResponseActions } from './OfferResponseActions'
 import { offerStatusLabels } from './statusLabels'
 import { fieldClass } from './styles'
-import { RateOfferButton } from '../ratings/RateOfferButton'
+import { RateOfferButton } from '@ratings/RateOfferButton'
 
 interface BuyerOfferPanelProps {
   listing: Listing

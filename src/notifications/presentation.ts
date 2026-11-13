@@ -6,7 +6,7 @@ import {
   IconRefresh,
   IconXCircle,
   type IconComponent,
-} from '../components/icons'
+} from '@components/icons'
 import type { Notification, NotificationType } from './types'
 
 export const notificationLabels: Record<NotificationType, string> = {

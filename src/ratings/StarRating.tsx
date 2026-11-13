@@ -1,4 +1,4 @@
-import { IconStar } from '../components/icons'
+import { IconStar } from '@components/icons'
 
 interface StarRatingProps {
   score: number

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { ApiError } from '../api/client'
+import { ApiError } from '@api/client'
 import { useAcceptOffer, useCounterOffer, useRejectOffer } from './api'
 import { fieldClassSm } from './styles'
 

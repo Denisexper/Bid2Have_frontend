@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { apiFetch } from '../api/client'
+import { apiFetch } from '@api/client'
 import type { Rating } from './types'
 
 interface UserRatingsResponse {

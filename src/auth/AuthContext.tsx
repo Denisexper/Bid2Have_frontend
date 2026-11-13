@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react'
-import { apiFetch, getToken, onUnauthorized, setToken } from '../api/client'
-import { disconnectChatSocket } from '../chat/socket'
+import { apiFetch, getToken, onUnauthorized, setToken } from '@api/client'
+import { disconnectChatSocket } from '@chat/socket'
 import type { AuthUser } from './types'
 
 interface GoogleLoginResponse {

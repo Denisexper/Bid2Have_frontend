@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom'
-import { useAuth } from '../auth/AuthContext'
-import { ApiError } from '../api/client'
+import { useAuth } from '@auth/AuthContext'
+import { ApiError } from '@api/client'
 import { useFollowing, useFollowUser, useUnfollowUser } from './api'
 
 interface FollowButtonProps {

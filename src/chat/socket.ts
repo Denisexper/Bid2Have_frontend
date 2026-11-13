@@ -1,5 +1,5 @@
 import { io, type Socket } from 'socket.io-client'
-import { getToken } from '../api/client'
+import { getToken } from '@api/client'
 
 let socket: Socket | null = null
 

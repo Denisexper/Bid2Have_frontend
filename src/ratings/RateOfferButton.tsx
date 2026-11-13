@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from 'react'
 import { useCreateRating } from './api'
 import { hasRatedOffer, markOfferRated } from './ratedOfferStorage'
-import { IconStar } from '../components/icons'
+import { IconStar } from '@components/icons'
 
 interface RateOfferButtonProps {
   offerId: string

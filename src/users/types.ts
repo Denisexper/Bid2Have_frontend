@@ -1,4 +1,4 @@
-import type { UserRole } from '../auth/types'
+import type { UserRole } from '@auth/types'
 
 export type UserStatus = 'ACTIVE' | 'SUSPENDED'
 
