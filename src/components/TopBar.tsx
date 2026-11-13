@@ -1,7 +1,7 @@
 import { Link, useLocation } from 'react-router-dom'
-import { useAuth } from '../auth/AuthContext'
-import { NotificationsBell } from '../notifications/NotificationsBell'
-import { useTheme } from '../theme/useTheme'
+import { useAuth } from '@auth/AuthContext'
+import { NotificationsBell } from '@notifications/NotificationsBell'
+import { useTheme } from '@theme/useTheme'
 import { IconMoon, IconSun } from './icons'
 
 export function TopBar() {
