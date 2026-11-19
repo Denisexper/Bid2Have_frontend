@@ -3,6 +3,7 @@ import { ApiError } from '@api/client'
 import { useCategories, useCreateCategory, useDeleteCategory, useUpdateCategory } from '@categories/api'
 import { slugify } from '@categories/slugify'
 import type { Category } from '@categories/types'
+import { fieldClass, fieldClassSm, labelClass } from '@components/fieldStyles'
 
 export function AdminCategoriesPage() {
   const { data, isLoading, isError } = useCategories()
@@ -10,7 +11,10 @@ export function AdminCategoriesPage() {
 
   return (
     <div className="flex flex-col gap-4">
-      <h1 className="text-lg font-bold">Categorías</h1>
+      <div className="flex items-baseline justify-between">
+        <h1 className="text-lg font-bold">Categorías</h1>
+        {categories.length > 0 && <span className="text-xs text-base-content/40">{categories.length}</span>}
+      </div>
 
       <NewCategoryForm />
 
@@ -26,7 +30,7 @@ export function AdminCategoriesPage() {
         <p className="py-8 text-center text-sm text-base-content/60">Todavía no hay categorías.</p>
       )}
 
-      <ul className="flex flex-col gap-2">
+      <ul className="grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
         {categories.map((category) => (
           <CategoryRow key={category.id} category={category} />
         ))}
@@ -66,27 +70,33 @@ function NewCategoryForm() {
 
   return (
     <form onSubmit={handleSubmit} className="border-2 border-base-300 bg-base-100 p-4">
-      <h2 className="mb-2 text-sm font-bold text-base-content/70">Nueva categoría</h2>
-      <div className="flex flex-col gap-2 sm:flex-row">
-        <input
-          type="text"
-          className="input input-bordered flex-1"
-          placeholder="Nombre"
-          value={name}
-          onChange={(e) => handleNameChange(e.target.value)}
-          required
-        />
-        <input
-          type="text"
-          className="input input-bordered flex-1"
-          placeholder="slug"
-          value={slug}
-          onChange={(e) => {
-            setSlugTouched(true)
-            setSlug(e.target.value)
-          }}
-          required
-        />
+      <h2 className="mb-3 text-sm font-bold text-base-content/70">Nueva categoría</h2>
+      <div className="grid gap-4 sm:grid-cols-[1fr_1fr_auto] sm:items-end">
+        <label className="flex flex-col gap-1.5">
+          <span className={labelClass}>Nombre</span>
+          <input
+            type="text"
+            className={fieldClass}
+            placeholder="Ej. Electrónica"
+            value={name}
+            onChange={(e) => handleNameChange(e.target.value)}
+            required
+          />
+        </label>
+        <label className="flex flex-col gap-1.5">
+          <span className={labelClass}>Slug</span>
+          <input
+            type="text"
+            className={fieldClass}
+            placeholder="electronica"
+            value={slug}
+            onChange={(e) => {
+              setSlugTouched(true)
+              setSlug(e.target.value)
+            }}
+            required
+          />
+        </label>
         <button type="submit" className="btn btn-primary" disabled={createCategory.isPending}>
           {createCategory.isPending ? <span className="loading loading-spinner loading-sm" /> : 'Crear'}
         </button>
@@ -127,27 +137,23 @@ function CategoryRow({ category }: { category: Category }) {
   if (isEditing) {
     return (
       <li className="border-2 border-base-300 bg-base-100 p-3">
-        <div className="flex flex-col gap-2 sm:flex-row">
+        <div className="flex flex-col gap-2">
           <input
             type="text"
-            className="input input-bordered input-sm flex-1"
+            className={fieldClassSm}
             value={name}
             onChange={(e) => setName(e.target.value)}
+            autoFocus
           />
-          <input
-            type="text"
-            className="input input-bordered input-sm flex-1"
-            value={slug}
-            onChange={(e) => setSlug(e.target.value)}
-          />
-          <div className="flex gap-2">
-            <button type="button" className="btn btn-primary btn-sm" disabled={update.isPending} onClick={saveEdit}>
-              Guardar
-            </button>
-            <button type="button" className="btn btn-ghost btn-sm" onClick={cancelEdit}>
-              Cancelar
-            </button>
-          </div>
+          <input type="text" className={fieldClassSm} value={slug} onChange={(e) => setSlug(e.target.value)} />
+        </div>
+        <div className="mt-2 flex gap-2">
+          <button type="button" className="btn btn-primary btn-xs" disabled={update.isPending} onClick={saveEdit}>
+            Guardar
+          </button>
+          <button type="button" className="btn btn-ghost btn-xs" onClick={cancelEdit}>
+            Cancelar
+          </button>
         </div>
         {error && (
           <p className="mt-1 text-xs text-error">
@@ -160,7 +166,7 @@ function CategoryRow({ category }: { category: Category }) {
 
   return (
     <li className="flex flex-col gap-1 border-2 border-base-300 bg-base-100 p-3">
-      <div className="flex items-center justify-between gap-3">
+      <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="truncate text-sm font-bold">{category.name}</h3>
           <p className="truncate text-xs text-base-content/50">{category.slug}</p>
