@@ -19,7 +19,10 @@ export function AdminUsersPage() {
 
   return (
     <div className="flex flex-col gap-3">
-      <h1 className="text-lg font-bold">Usuarios</h1>
+      <div className="flex items-baseline justify-between">
+        <h1 className="text-lg font-bold">Usuarios</h1>
+        {users.length > 0 && <span className="text-xs text-base-content/40">{users.length}</span>}
+      </div>
 
       <div className="flex gap-1.5">
         {statusFilters.map((option) => (
@@ -46,7 +49,7 @@ export function AdminUsersPage() {
         <p className="py-8 text-center text-sm text-base-content/60">No hay usuarios en esta categoría.</p>
       )}
 
-      <ul className="flex flex-col gap-2">
+      <ul className="grid gap-2 lg:grid-cols-2">
         {users.map((user) => (
           <UserRow key={user.id} user={user} />
         ))}
@@ -66,12 +69,16 @@ function UserRow({ user }: { user: AdminUser }) {
   const initial = user.name.charAt(0).toUpperCase()
 
   return (
-    <li className="flex flex-col gap-1 border-2 border-base-300 bg-base-100 p-3">
-      <div className="flex items-center gap-3">
+    <li className="flex flex-col gap-2 border-2 border-base-300 bg-base-100 p-3 sm:p-4">
+      <div className="flex items-start gap-3">
         {user.avatarUrl ? (
-          <img src={user.avatarUrl} alt={user.name} className="h-10 w-10 shrink-0 rounded-full object-cover" />
+          <img
+            src={user.avatarUrl}
+            alt={user.name}
+            className="h-10 w-10 shrink-0 rounded-full object-cover sm:h-12 sm:w-12"
+          />
         ) : (
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-content">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary text-sm font-bold text-primary-content sm:h-12 sm:w-12">
             {initial}
           </div>
         )}
@@ -85,22 +92,23 @@ function UserRow({ user }: { user: AdminUser }) {
           <p className="text-[11px] text-base-content/40">Desde {formatRelativeTime(user.createdAt)}</p>
         </div>
 
-        <div className="flex shrink-0 flex-col items-end gap-1.5">
-          <span className={`badge badge-sm ${user.status === 'ACTIVE' ? 'badge-success' : 'badge-error'}`}>
-            {user.status === 'ACTIVE' ? 'Activo' : 'Suspendido'}
-          </span>
-          {!isSelf && (
-            <button
-              type="button"
-              className="btn btn-ghost btn-xs"
-              disabled={isPending}
-              onClick={() => (user.status === 'ACTIVE' ? suspend.mutate(user.id) : reactivate.mutate(user.id))}
-            >
-              {user.status === 'ACTIVE' ? 'Suspender' : 'Reactivar'}
-            </button>
-          )}
-        </div>
+        <span className={`badge badge-sm shrink-0 ${user.status === 'ACTIVE' ? 'badge-success' : 'badge-error'}`}>
+          {user.status === 'ACTIVE' ? 'Activo' : 'Suspendido'}
+        </span>
       </div>
+
+      {!isSelf && (
+        <div className="flex justify-end border-t border-base-300 pt-2">
+          <button
+            type="button"
+            className={`btn btn-xs ${user.status === 'ACTIVE' ? 'btn-outline btn-error' : 'btn-primary'}`}
+            disabled={isPending}
+            onClick={() => (user.status === 'ACTIVE' ? suspend.mutate(user.id) : reactivate.mutate(user.id))}
+          >
+            {user.status === 'ACTIVE' ? 'Suspender' : 'Reactivar'}
+          </button>
+        </div>
+      )}
 
       {error && (
         <p className="text-xs text-error">
